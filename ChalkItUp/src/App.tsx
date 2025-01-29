@@ -1,14 +1,15 @@
-import {Routes} from "react-router-dom";
-import {Navbar} from "@/components/navbar.tsx";
+
+import { Route, Routes } from 'react-router-dom';
+
+import IndexPage from '@/pages/index';
+import PlayerPage from './pages/player';
 
 function App() {
     return (
-        <>
-            <Navbar/>
-            <Routes>
-
-            </Routes>
-        </>
+        <Routes>
+            <Route element={<IndexPage />} path="/" />
+            <Route element={<PlayerPage />} path="/player" />
+        </Routes>
     );
 }
 
