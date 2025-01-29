@@ -84,8 +84,8 @@ app.get('/games', (req, res) => {
 app.get('/player-stats', (req, res) => {
     const sql = `
         SELECT 
-            p1.FirstName AS Player1, 
-            p2.FirstName AS Player2,
+            p1.PlayerID AS Player1, 
+            p2.PlayerID AS Player2,
             (SELECT COUNT(*) FROM Games g WHERE g.Winner = p1.PlayerID AND g.Loser = p2.PlayerID) AS Wins_P1,
             (SELECT COUNT(*) FROM Games g WHERE g.Winner = p2.PlayerID AND g.Loser = p1.PlayerID) AS Wins_P2
         FROM Player p1
