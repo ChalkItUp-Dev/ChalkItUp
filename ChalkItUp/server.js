@@ -103,6 +103,34 @@ app.get('/player-stats', (req, res) => {
     });
 });
 
+app.put('/updatePlayer', (req, res) => {
+    const { playerId, firstName, lastName } = req.body;
+
+    // Überprüfen, ob alle notwendigen Parameter vorhanden sind
+    if (!playerId || !lastName || !firstName) {
+        return res.status(400).json({
+            message: 'Missing required fields: playerID, lastName, firstName',
+        });
+    }
+
+    const sql =
+        'UPDATE Player SET LastName = ?, FirstName = ? WHERE PlayerID = ?';
+
+    db.query(sql, [lastName, firstName, playerId], (err, results) => {
+        if (err) {
+            console.error('Fehler beim Update:', err);
+            return res.status(500).json({ message: 'Error updating player' });
+        }
+
+        // Wenn keine Zeilen betroffen sind, wurde der Spieler möglicherweise nicht gefunden
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Player not found' });
+        }
+
+        res.status(200).json({ message: 'Player successfully updated' });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server läuft auf http://localhost:${PORT}`);
 });

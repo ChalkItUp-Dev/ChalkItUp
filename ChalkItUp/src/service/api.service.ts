@@ -17,7 +17,7 @@ export interface GameStats {
     Wins_P2: number;
 }
 
-const API_URL = process.env.api_url;
+const API_URL = 'http://localhost:3000'; //https://chalkitupserver.onrender.com;
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/players`);
@@ -69,4 +69,19 @@ export const fetchGameStats = async (): Promise<GameStats[]> => {
         throw new Error('Fehler beim Abrufen der Spiele');
     }
     return response.json();
+};
+
+export const updatePlayer = async (
+    playerId: number,
+    firstName: string,
+    lastName: string
+): Promise<void> => {
+    const response = await fetch(`${API_URL}/updateplayer`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId, firstName, lastName }),
+    });
+    if (!response.ok) {
+        throw new Error('Fehler beim Speichern des Spielers');
+    }
 };
