@@ -1,7 +1,7 @@
-const express = require("express");
-const mysql = require("mysql2");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+import express from "express";
+import mysql from "mysql2";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 const app = express();
 const PORT = 3000;
@@ -10,11 +10,14 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // MySQL Verbindung konfigurieren
-const db = mysql.createConnection({
+import { createConnection } from "mysql2";
+
+const db = createConnection({
   host: "mysql-10bf4a0a-chalkitup.g.aivencloud.com",
-  user: "avnadmin", // Dein MySQL-Benutzername
-  password: "password", // Dein MySQL-Passwort
-  database: "defaultdb", // Name der Datenbank
+  port: 16719,
+  user: "avnadmin",
+  password: $passwort,
+  database: "defaultdb",
 });
 
 // Verbindung zur Datenbank herstellen
