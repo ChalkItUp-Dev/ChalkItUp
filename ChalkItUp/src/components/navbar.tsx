@@ -38,10 +38,10 @@ export const Navbar = () => {
                     }}
                 >
                     <Link color="foreground" href="/">
-                        Home
+                        Matches
                     </Link>
-                    <Link color="foreground" href="/">
-                        Docs
+                    <Link color="foreground" href="/players">
+                        Players
                     </Link>
                     <Link color="foreground" href="/">
                         About
