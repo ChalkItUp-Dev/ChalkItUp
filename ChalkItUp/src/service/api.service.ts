@@ -17,7 +17,7 @@ export interface GameStats {
     Wins_P2: number;
 }
 
-const API_URL = 'http://localhost:3000'; //https://chalkitupserver.onrender.com;
+const API_URL = 'https://chalkitupserver.onrender.com'; //'http://localhost:3000';
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/players`);
