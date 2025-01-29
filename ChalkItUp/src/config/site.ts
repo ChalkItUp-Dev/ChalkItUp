@@ -37,6 +37,5 @@ export const siteConfig = {
       href: "/logout",
     },
   ],
-  links: {
-  },
+  links: {},
 };
