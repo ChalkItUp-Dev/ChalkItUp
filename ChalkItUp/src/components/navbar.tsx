@@ -10,7 +10,6 @@ import {Image} from "@heroui/image";
 import Logo from "@/assets/logo.jpg"
 import {useNavigate} from "react-router-dom";
 
-
 export const Navbar = () => {
     const navigate = useNavigate();
     const onHome = () => {
