@@ -25,10 +25,10 @@ export const Navbar = () => {
                 </NavbarItem>
                 <NavbarItem style={{display: 'flex', justifyContent: 'space-evenly', flexGrow: 1}}>
                     <Link color="foreground" href="/">
-                        Home
+                        Matches
                     </Link>
-                    <Link color="foreground" href="/docs">
-                        Docs
+                    <Link color="foreground" href="/players">
+                        Players
                     </Link>
                     <Link color="foreground" href="/about">
                         About
