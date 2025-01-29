@@ -16,7 +16,7 @@ const db = createConnection({
   host: "mysql-10bf4a0a-chalkitup.g.aivencloud.com",
   port: 16719,
   user: "avnadmin",
-  password: $passwort,
+  password: process.env.passwort,
   database: "defaultdb",
 });
 
