@@ -1,21 +1,11 @@
 import DefaultLayout from '@/layouts/default';
-import {
-    fetchGameStats,
-    fetchPlayers,
-    GameStats,
-    Player,
-    savePlayer,
-    updatePlayer,
-} from '@/service/api.service';
+import { fetchPlayers, Player, updatePlayer } from '@/service/api.service';
 import { useEffect, useState } from 'react';
 import {
     Card,
     CardHeader,
     CardBody,
-    CardFooter,
     Divider,
-    Link,
-    Progress,
     Button,
     Dropdown,
     DropdownItem,

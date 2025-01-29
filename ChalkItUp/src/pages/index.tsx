@@ -14,7 +14,6 @@ import {
     Divider,
     Progress,
     Button,
-    Input,
     Modal,
     ModalBody,
     ModalContent,
