@@ -1,6 +1,6 @@
 import DefaultLayout from '@/layouts/default';
 import { fetchPlayers, Player, updatePlayer } from '@/service/api.service';
-import { useEffect, useState } from 'react';
+import { ReactHTMLElement, useEffect, useState } from 'react';
 import {
     Card,
     CardHeader,
@@ -104,7 +104,9 @@ export default function PlayerPage() {
                             <ModalBody>
                                 <Input
                                     label="Firstname"
-                                    onChange={(firstname) => {
+                                    onChange={(
+                                        firstname: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
                                         setPlayerUpdate({
                                             ...playerUpdate,
                                             FirstName: firstname.target.value,
@@ -114,7 +116,9 @@ export default function PlayerPage() {
                                 ></Input>
                                 <Input
                                     label="Lastname"
-                                    onChange={(lastname) => {
+                                    onChange={(
+                                        lastname: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
                                         setPlayerUpdate({
                                             ...playerUpdate,
                                             LastName: lastname.target.value,
