@@ -19,6 +19,7 @@ import {
     ModalHeader,
     useDisclosure,
 } from '@heroui/modal';
+import { useNavigate } from 'react-router-dom';
 
 export default function IndexPage() {
     const defaultGame: GameStats = {
@@ -27,6 +28,8 @@ export default function IndexPage() {
         Wins_P1: 0,
         Wins_P2: 0,
     };
+
+    const navigate = useNavigate();
 
     const [gameStats, setGameStats] = useState<GameStats[]>([]);
     const [player, setPlayer] = useState<Player[]>([]);
@@ -53,6 +56,15 @@ export default function IndexPage() {
         const p = player.find((x) => id === x.PlayerID);
 
         if (p) return p;
+    };
+
+    const editStat = () => {
+        navigate(
+            `/edit-player/${selectedGame.Player1}/${selectedGame.Player2}`,
+            {
+                state: { p1: selectedGame.Player1, p2: selectedGame.Player2 },
+            }
+        );
     };
 
     return (
@@ -142,6 +154,14 @@ export default function IndexPage() {
                                 </Button>
                             </ModalBody>
                             <ModalFooter>
+                                <Button
+                                    color="default"
+                                    variant="solid"
+                                    onPress={editStat}
+                                >
+                                    Edit Game
+                                </Button>
+
                                 <Button
                                     color="danger"
                                     variant="light"

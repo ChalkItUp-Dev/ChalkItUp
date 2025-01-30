@@ -13,7 +13,7 @@ export const Navbar = () => {
     };
 
     return (
-        <NavBar isBordered isBlurred={false}>
+        <NavBar isBordered isBlurred={false} className="mb-[40px]">
             <NavbarContent
                 style={{
                     display: 'flex',
