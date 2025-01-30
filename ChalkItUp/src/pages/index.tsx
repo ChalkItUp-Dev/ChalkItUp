@@ -44,7 +44,7 @@ export default function IndexPage() {
         fetchPlayers().then((player) => {
             setPlayer(player);
         });
-    }, [isOpen]);
+    }, [submitStat]);
 
     const findePlayer = (id: number) => {
         const p = player.find((x) => id === x.PlayerID);
