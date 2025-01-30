@@ -7,20 +7,18 @@ import {
     saveGame,
 } from '@/service/api.service';
 import { useEffect, useState } from 'react';
+import { Card, CardHeader, CardBody } from '@heroui/card';
+import { Divider } from '@heroui/divider';
+import { Button } from '@heroui/button';
+import { Progress } from '@heroui/progress';
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Divider,
-    Progress,
-    Button,
     Modal,
     ModalBody,
     ModalContent,
     ModalFooter,
     ModalHeader,
     useDisclosure,
-} from '@heroui/react';
+} from '@heroui/modal';
 
 export default function IndexPage() {
     const [gameStats, setGameStats] = useState<GameStats[]>([]);
