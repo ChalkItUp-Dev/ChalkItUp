@@ -1,6 +1,6 @@
 import DefaultLayout from '@/layouts/default';
 import { fetchPlayers, Player, updatePlayer } from '@/service/api.service';
-import { ReactHTMLElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Card,
     CardHeader,
