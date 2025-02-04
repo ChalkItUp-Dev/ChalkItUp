@@ -43,7 +43,7 @@ export default function PlayerPage() {
         fetchPlayers().then((player) => {
             setPlayer(player);
         });
-    }, [submitPlayer]);
+    }, [isOpen]);
 
     return (
         <DefaultLayout>
