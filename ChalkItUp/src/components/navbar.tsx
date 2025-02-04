@@ -5,6 +5,7 @@ import { ThemeSwitch } from '@/components/theme-switch';
 import { Image } from '@heroui/image';
 import Logo from '@/assets/logo.jpg';
 import { useNavigate } from 'react-router-dom';
+import LogOutButton from "@/components/auth/logOut.tsx";
 
 export const Navbar = () => {
     const navigate = useNavigate();
@@ -48,6 +49,7 @@ export const Navbar = () => {
                     </Link>
                 </NavbarItem>
                 <ThemeSwitch />
+                <LogOutButton/>
             </NavbarContent>
         </NavBar>
     );
