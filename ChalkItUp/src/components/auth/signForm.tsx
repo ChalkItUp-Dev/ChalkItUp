@@ -1,10 +1,10 @@
-import {useState} from 'react';
-import {useNavigate, Link} from 'react-router-dom';
-import {Input} from "@heroui/input";
-import {Form} from "@heroui/form";
-import {Button} from "@heroui/button";
-import {EyeFilledIcon, EyeSlashFilledIcon} from "@/components/auth/passwordEye.tsx";
-
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Input } from "@heroui/input";
+import { Form } from "@heroui/form";
+import { Button } from "@heroui/button";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/auth/passwordEye.tsx";
+import { signInWithGoogle, signInWithGithub } from "../../firebase/auth";  // Google & GitHub Import
 
 interface AuthFormProps {
     title: string;
@@ -14,7 +14,7 @@ interface AuthFormProps {
     linkTo: string;
 }
 
-const AuthForm = ({title, buttonText, onSubmit, linkText, linkTo}: AuthFormProps) => {
+const AuthForm = ({ title, buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,7 +22,6 @@ const AuthForm = ({title, buttonText, onSubmit, linkText, linkTo}: AuthFormProps
     const navigate = useNavigate();
 
     const [isVisible, setIsVisible] = useState(false);
-
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -39,6 +38,24 @@ const AuthForm = ({title, buttonText, onSubmit, linkText, linkTo}: AuthFormProps
         setIsSubmitting(false);
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            await signInWithGoogle();
+            navigate("/");
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    const handleGithubSignIn = async () => {
+        try {
+            await signInWithGithub();
+            navigate("/");
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
     return (
         <main className="w-full h-screen flex self-center place-content-center place-items-center">
             <div>
@@ -47,7 +64,6 @@ const AuthForm = ({title, buttonText, onSubmit, linkText, linkTo}: AuthFormProps
                     <Input
                         isRequired
                         label="Email"
-
                         placeholder="Enter your email"
                         type="email"
                         onChange={(e) => setEmail(e.target.value)}
@@ -79,9 +95,27 @@ const AuthForm = ({title, buttonText, onSubmit, linkText, linkTo}: AuthFormProps
                     />
                     <Button type="submit"
                             disabled={isSubmitting}
-                            color="primary">{isSubmitting ? 'Loading...' : buttonText}</Button>
+                            color="primary">{isSubmitting ? 'Loading...' : buttonText}
+                    </Button>
                 </Form>
-                <p className="text-center text-sm">
+
+                {/* 🔹 Google & GitHub Login Buttons */}
+                <div className="flex flex-col space-y-3 mt-4">
+                    <Button
+                        onPress={handleGoogleSignIn}
+                        color="danger"
+                        className="w-full">
+                        Sign in with Google
+                    </Button>
+                    <Button
+                        onPress={handleGithubSignIn}
+                        color="default"
+                        className="w-full">
+                        Sign in with GitHub
+                    </Button>
+                </div>
+
+                <p className="text-center text-sm mt-4">
                     <Link to={linkTo} className="hover:underline font-bold">
                         {linkText}
                     </Link>
