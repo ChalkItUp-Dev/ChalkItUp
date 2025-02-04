@@ -1,0 +1,18 @@
+.footerd {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footere {
+    max-width: 1024px;
+    padding: 0 24px;
+}
+
+
+@media (max-width: 768px) {
+
+    .footere {
+        width: 90%;
+    }
+}

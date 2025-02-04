@@ -1,0 +1,17 @@
+.form {
+    margin: 2vh;
+    width: 20vw;
+    text-align: center;
+}
+
+.form > .Input {
+    margin: 5vh;
+}
+
+@media (max-width: 768px) {
+    .form {
+        flex-direction: column;
+        align-items: center;
+        width: 99%;
+    }
+}

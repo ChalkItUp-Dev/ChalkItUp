@@ -4,7 +4,11 @@ import { Input } from "@heroui/input";
 import { Form } from "@heroui/form";
 import { Button } from "@heroui/button";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/auth/passwordEye.tsx";
-import { signInWithGoogle, signInWithGithub } from "../../firebase/auth";  // Google & GitHub Import
+import { signInWithGoogle, signInWithGithub } from "../../firebase/auth";
+import { FcGoogle } from "react-icons/fc"; // Google Icon
+import { FaGithub } from "react-icons/fa"; // GitHub Icon
+import { Divider } from "@heroui/divider";
+import "./signForm.css"
 
 interface AuthFormProps {
     title: string;
@@ -14,7 +18,7 @@ interface AuthFormProps {
     linkTo: string;
 }
 
-const AuthForm = ({ title, buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
+const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,10 +61,9 @@ const AuthForm = ({ title, buttonText, onSubmit, linkText, linkTo }: AuthFormPro
     };
 
     return (
-        <main className="w-full h-screen flex self-center place-content-center place-items-center">
-            <div>
-                <h3>{title}</h3>
-                <Form className="w-full max-w-xs" validationBehavior="native" onSubmit={handleSubmit}>
+        <main className="flex items-center justify-center min-h-screen  px-4">
+            <div className={"form"}>
+                <Form validationBehavior="native" onSubmit={handleSubmit}>
                     <Input
                         isRequired
                         label="Email"
@@ -68,10 +71,11 @@ const AuthForm = ({ title, buttonText, onSubmit, linkText, linkTo }: AuthFormPro
                         type="email"
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
+                        variant="bordered"
                     />
                     <Input
                         isRequired
-                        className="max-w-xs"
+                        className="relative"
                         endContent={
                             <button
                                 aria-label="toggle password visibility"
@@ -93,34 +97,46 @@ const AuthForm = ({ title, buttonText, onSubmit, linkText, linkTo }: AuthFormPro
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button type="submit"
-                            disabled={isSubmitting}
-                            color="primary">{isSubmitting ? 'Loading...' : buttonText}
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        color="primary"
+                        className="w-full"
+                    >
+                        {isSubmitting ? 'Loading...' : buttonText}
                     </Button>
                 </Form>
 
-                {/* 🔹 Google & GitHub Login Buttons */}
-                <div className="flex flex-col space-y-3 mt-4">
-                    <Button
-                        onPress={handleGoogleSignIn}
-                        color="danger"
-                        className="w-full">
-                        Sign in with Google
-                    </Button>
-                    <Button
-                        onPress={handleGithubSignIn}
-                        color="default"
-                        className="w-full">
-                        Sign in with GitHub
-                    </Button>
+                {/* 🔹 Divider mit Abstand */}
+                <div className="flex items-center my-6">
+                    <Divider className="flex-grow"/>
                 </div>
 
-                <p className="text-center text-sm mt-4">
+                {/* 🔹 Google & GitHub Login mit Icons */}
+                <div className="flex justify-center space-x-4">
+                    <button
+                        onClick={handleGoogleSignIn}
+                        className="p-3 rounded-full border border-gray-300 hover:shadow-md transition duration-300"
+                        aria-label="Sign in with Google"
+                    >
+                        <FcGoogle size={28} />
+                    </button>
+                    <button
+                        onClick={handleGithubSignIn}
+                        className="p-3 rounded-full border border-gray-300 hover:shadow-md transition duration-300"
+                        aria-label="Sign in with GitHub"
+                    >
+                        <FaGithub size={28} />
+                    </button>
+                </div>
+
+                <p>
                     <Link to={linkTo} className="hover:underline font-bold">
                         {linkText}
                     </Link>
                 </p>
-                {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+
+                {error && <p>{error}</p>}
             </div>
         </main>
     );
