@@ -4,13 +4,13 @@ import { ThemeSwitch } from '@/components/theme-switch';
 import { Image } from '@heroui/image';
 import Logo from '@/assets/logo.jpg';
 import { useNavigate } from 'react-router-dom';
-import LogOutButton from "@/components/auth/logOut.tsx";
+import LogOutButton from '@/components/auth/logOut.tsx';
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase/firebase.ts';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 export const Navbar = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,8 +52,12 @@ export const Navbar = () => {
                         flexGrow: 1,
                     }}
                 >
-                    {!user && location.pathname === "/register" && <h2>Welcome to ChalkItUp!</h2>}
-                    {!user && location.pathname === "/login" && <h2>Welcome back!</h2>}
+                    {!user && location.pathname === '/register' && (
+                        <h2>Welcome to ChalkItUp!</h2>
+                    )}
+                    {!user && location.pathname === '/login' && (
+                        <h2>Welcome back!</h2>
+                    )}
                     {user && (
                         <>
                             <Link color="foreground" href="/">

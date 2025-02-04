@@ -1,24 +1,32 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Input } from "@heroui/input";
-import { Form } from "@heroui/form";
-import { Button } from "@heroui/button";
-import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/auth/passwordEye.tsx";
-import { signInWithGoogle, signInWithGithub } from "../../firebase/auth";
-import { FcGoogle } from "react-icons/fc"; // Google Icon
-import { FaGithub } from "react-icons/fa"; // GitHub Icon
-import { Divider } from "@heroui/divider";
-import "./signForm.css"
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Input } from '@heroui/input';
+import { Form } from '@heroui/form';
+import { Button } from '@heroui/button';
+import {
+    EyeFilledIcon,
+    EyeSlashFilledIcon,
+} from '@/components/auth/passwordEye.tsx';
+import { signInWithGoogle, signInWithGithub } from '../../firebase/auth';
+import { FcGoogle } from 'react-icons/fc'; // Google Icon
+import { FaGithub } from 'react-icons/fa'; // GitHub Icon
+import { Divider } from '@heroui/divider';
+import './signForm.css';
+import { UserCredential } from 'firebase/auth';
 
 interface AuthFormProps {
-    title: string;
     buttonText: string;
-    onSubmit: (email: string, password: string) => Promise<void>;
+    onSubmit: (email: string, password: string) => Promise<UserCredential>;
     linkText: string;
     linkTo: string;
 }
 
-const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
+const AuthForm = ({
+    buttonText,
+    onSubmit,
+    linkText,
+    linkTo,
+}: AuthFormProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +53,7 @@ const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
     const handleGoogleSignIn = async () => {
         try {
             await signInWithGoogle();
-            navigate("/");
+            navigate('/');
         } catch (err: any) {
             setError(err.message);
         }
@@ -54,7 +62,7 @@ const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
     const handleGithubSignIn = async () => {
         try {
             await signInWithGithub();
-            navigate("/");
+            navigate('/');
         } catch (err: any) {
             setError(err.message);
         }
@@ -62,7 +70,7 @@ const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
 
     return (
         <main className="flex items-center justify-center min-h-screen  px-4">
-            <div className={"form"}>
+            <div className={'form'}>
                 <Form validationBehavior="native" onSubmit={handleSubmit}>
                     <Input
                         isRequired
@@ -84,15 +92,15 @@ const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
                                 onClick={toggleVisibility}
                             >
                                 {isVisible ? (
-                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none"/>
+                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                                 ) : (
-                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none"/>
+                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                                 )}
                             </button>
                         }
                         label="Password"
                         placeholder="Enter your password"
-                        type={isVisible ? "text" : "password"}
+                        type={isVisible ? 'text' : 'password'}
                         variant="bordered"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -109,7 +117,7 @@ const AuthForm = ({buttonText, onSubmit, linkText, linkTo }: AuthFormProps) => {
 
                 {/* 🔹 Divider mit Abstand */}
                 <div className="flex items-center my-6">
-                    <Divider className="flex-grow"/>
+                    <Divider className="flex-grow" />
                 </div>
 
                 {/* 🔹 Google & GitHub Login mit Icons */}
