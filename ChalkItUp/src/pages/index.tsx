@@ -21,18 +21,21 @@ import {
 } from '@heroui/modal';
 
 export default function IndexPage() {
-    const [gameStats, setGameStats] = useState<GameStats[]>([]);
-    const [player, setPlayer] = useState<Player[]>([]);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [selectedGame, setSelectedGame] = useState<GameStats>({
+    const defaultGame: GameStats = {
         Player1: 0,
         Player2: 0,
         Wins_P1: 0,
         Wins_P2: 0,
-    });
+    };
+
+    const [gameStats, setGameStats] = useState<GameStats[]>([]);
+    const [player, setPlayer] = useState<Player[]>([]);
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [selectedGame, setSelectedGame] = useState<GameStats>(defaultGame);
 
     const submitStat = (winner: number, loser: number) => {
         saveGame(winner, loser).then(() => {
+            setSelectedGame(defaultGame);
             console.log('Update success');
         });
     };
@@ -44,7 +47,7 @@ export default function IndexPage() {
         fetchPlayers().then((player) => {
             setPlayer(player);
         });
-    }, [submitStat]);
+    }, [selectedGame]);
 
     const findePlayer = (id: number) => {
         const p = player.find((x) => id === x.PlayerID);
