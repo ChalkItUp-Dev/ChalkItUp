@@ -9,7 +9,7 @@ export function Footer() {
                     <Link href="https://github.com/gabrielakbarov/ChalkItUp">
                         Visit Github-Repo
                     </Link>
-                    <p className="text-gray-700">© {new Date().getFullYear()} All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} All rights reserved.</p>
                 </div>
             </footer>
         </div>

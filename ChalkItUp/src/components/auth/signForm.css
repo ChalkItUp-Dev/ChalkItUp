@@ -1,17 +1,26 @@
+.main {
+    justify-self: center;
+}
+
 .form {
     margin: 2vh;
     width: 20vw;
     text-align: center;
+    justify-content: center;
 }
 
 .form > .Input {
     margin: 5vh;
 }
 
+.margin {
+    margin: 1vh;
+}
+
 @media (max-width: 768px) {
     .form {
         flex-direction: column;
         align-items: center;
-        width: 99%;
+        width: 90%;
     }
 }
