@@ -3,11 +3,11 @@ import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebas
 
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 
-export const doCreateUserWithEmailAndPassword = async (email, password) => {
+export const doCreateUserWithEmailAndPassword = async (email: string, password: string) => {
     return createUserWithEmailAndPassword(auth, email, password);
 }
 
-export const doSignInWithEmailAndPassword = (email, password) => {
+export const doSignInWithEmailAndPassword = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password);
 }
 

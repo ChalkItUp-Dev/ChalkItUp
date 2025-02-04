@@ -9,6 +9,7 @@ const LogoutButton = () => {
         try {
             await doSignOut();
         } catch (error) {
+            // @ts-ignore
             console.error("Logout failed:", error.message);
         }
     };
