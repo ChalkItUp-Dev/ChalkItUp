@@ -103,6 +103,29 @@ app.get('/player-stats', (req, res) => {
     });
 });
 
+app.get('/games-between', (req, res) => {
+    const { player1, player2 } = req.query;
+
+    if (!player1 || !player2) {
+        return res.status(400).send('Beide Spieler-IDs sind erforderlich.');
+    }
+
+    const sql = `
+        SELECT * FROM Games 
+        WHERE (Winner = ? AND Loser = ?) 
+        OR (Winner = ? AND Loser = ?)
+        ORDER BY GameID DESC;
+    `;
+
+    db.query(sql, [player1, player2, player2, player1], (err, results) => {
+        if (err) {
+            console.error('Fehler beim Abrufen der Spiele:', err);
+            return res.status(500).send('Fehler beim Abrufen der Spiele');
+        }
+        res.json(results);
+    });
+});
+
 app.put('/updatePlayer', (req, res) => {
     const { playerId, firstName, lastName } = req.body;
 

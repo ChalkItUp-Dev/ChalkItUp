@@ -17,7 +17,7 @@ export interface GameStats {
     Wins_P2: number;
 }
 
-const API_URL = 'https://chalkitupserver.onrender.com'; //'http://localhost:3000';
+const API_URL = 'http://localhost:3000'; // 'https://chalkitupserver.onrender.com'; //;
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/players`);
@@ -83,5 +83,23 @@ export const updatePlayer = async (
     });
     if (!response.ok) {
         throw new Error('Fehler beim Speichern des Spielers');
+    }
+};
+
+export const fetchGamesBetweenPlayers = async (
+    player1: number,
+    player2: number
+): Promise<Game[]> => {
+    try {
+        const response = await fetch(
+            `${API_URL}/games-between?player1=${player1}&player2=${player2}`
+        );
+        if (!response.ok) {
+            throw new Error('Fehler beim Abrufen der Spiele');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return [];
     }
 };
