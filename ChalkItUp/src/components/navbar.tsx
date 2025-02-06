@@ -8,18 +8,21 @@ import LogOutButton from '@/components/auth/logOut.tsx';
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase/firebase.ts';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { FiLogOut } from 'react-icons/fi';
+import useWindowSize from '@/hooks/useWindowSize';
+import {Avatar} from "@heroui/avatar";
 
 export const Navbar = () => {
     const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
+    const { width } = useWindowSize();
+    const onProfile = () => navigate("/profile");
 
     useEffect(() => {
-        // Überwache den Authentifizierungsstatus
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
         });
 
-        // Aufräumen der Subscription
         return () => unsubscribe();
     }, []);
 
@@ -38,12 +41,7 @@ export const Navbar = () => {
                 }}
             >
                 <NavbarItem style={{ flexShrink: 0 }}>
-                    <Image
-                        src={Logo}
-                        alt="Logo"
-                        height="50px"
-                        onClick={onHome}
-                    />
+                    <Image src={Logo} alt="Logo" height="50px" onClick={onHome} />
                 </NavbarItem>
                 <NavbarItem
                     style={{
@@ -52,12 +50,8 @@ export const Navbar = () => {
                         flexGrow: 1,
                     }}
                 >
-                    {!user && location.pathname === '/register' && (
-                        <h2>Welcome to ChalkItUp!</h2>
-                    )}
-                    {!user && location.pathname === '/login' && (
-                        <h2>Welcome back!</h2>
-                    )}
+                    {!user && location.pathname === '/register' && <h2>Welcome to ChalkItUp!</h2>}
+                    {!user && location.pathname === '/login' && <h2>Welcome back!</h2>}
                     {user && (
                         <>
                             <Link color="foreground" href="/">
@@ -73,7 +67,19 @@ export const Navbar = () => {
                     )}
                 </NavbarItem>
                 <ThemeSwitch />
-                {user && <LogOutButton />}
+                {user && (
+                    <>
+                        {width && width > 768 ? (
+                            <LogOutButton />
+                        ) : (
+                            <FiLogOut
+                                className="cursor-pointer text-xl"
+                                onClick={() => auth.signOut()}
+                            />
+                        )}
+                    </>
+                )}
+                {user && <Avatar name={user.displayName ?? "User"} onClick={onProfile}/>}
             </NavbarContent>
         </NavBar>
     );

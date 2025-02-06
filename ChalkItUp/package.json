@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroui/avatar": "^2.2.7",
     "@heroui/button": "2.2.9",
     "@heroui/card": "^2.2.10",
     "@heroui/code": "2.2.6",

@@ -1,7 +1,6 @@
 import {auth} from "./firebase.ts";
-import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebase/auth";
-
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import {GoogleAuthProvider, GithubAuthProvider, signInWithPopup} from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from "firebase/auth";
 
 export const doCreateUserWithEmailAndPassword = async (email: string, password: string) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -10,6 +9,23 @@ export const doCreateUserWithEmailAndPassword = async (email: string, password: 
 export const doSignInWithEmailAndPassword = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password);
 }
+
+export const doUpdateProfile = async (displayName: string, photoURL?: string): Promise<void> => {
+    if (!auth.currentUser) {
+        throw new Error("Kein Benutzer angemeldet");
+    }
+
+    try {
+        await updateProfile(auth.currentUser, {
+            displayName,
+            photoURL: photoURL || auth.currentUser.photoURL || ""
+        });
+        console.log("Profil aktualisiert:", { displayName, photoURL });
+    } catch (error) {
+        console.error("Fehler beim Aktualisieren des Profils:", error);
+        throw error;
+    }
+};
 
 export const doSignOut = () => {
     return auth.signOut();

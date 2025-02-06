@@ -16,9 +16,9 @@ const LogoutButton = () => {
             color="danger"
             variant="flat"
             onPress={handleLogout}
-            className="ml-4"
+            className="logout-button"
         >
-            Logout
+            Log out
         </Button>
     );
 };

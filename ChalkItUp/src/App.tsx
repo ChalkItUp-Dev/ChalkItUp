@@ -6,6 +6,8 @@ import { AuthProvider, useAuth } from './contexts/authContext/index.tsx';
 import IndexPage from '@/pages/index.tsx';
 import PlayerPage from '@/pages/player.tsx';
 
+import ProfilePage from '@/pages/profile.tsx'
+
 const App = () => {
     return (
         <AuthProvider>
@@ -42,6 +44,14 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <PlayerPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
                         </ProtectedRoute>
                     }
                 />

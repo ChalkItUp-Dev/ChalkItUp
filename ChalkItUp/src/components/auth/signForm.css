@@ -17,6 +17,11 @@
     margin: 1vh;
 }
 
+.margin-profile {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
 @media (max-width: 768px) {
     .form {
         flex-direction: column;
