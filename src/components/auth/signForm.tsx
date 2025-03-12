@@ -6,8 +6,8 @@ import {Button} from '@heroui/button';
 import {
     EyeFilledIcon,
     EyeSlashFilledIcon,
-} from '@/components/auth/passwordEye.tsx';
-import {signInWithGoogle, signInWithGithub} from '@/firebase/auth.ts';
+} from './passwordEye.tsx';
+import {signInWithGoogle, signInWithGithub} from '../../firebase/auth.ts';
 import {FcGoogle} from 'react-icons/fc'; // Google Icon
 import {FaGithub} from 'react-icons/fa'; // GitHub Icon
 import {Divider} from '@heroui/divider';

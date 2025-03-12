@@ -1,11 +1,11 @@
-import DefaultLayout from '@/layouts/default';
+import DefaultLayout from '../layouts/default';
 import {
     fetchGameStats,
     fetchPlayers,
     GameStats,
     Player,
     saveGame,
-} from '@/service/api.service';
+} from '../service/api.service';
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';

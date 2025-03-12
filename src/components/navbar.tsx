@@ -1,10 +1,10 @@
 import { Link } from '@heroui/link';
 import { Navbar as NavBar, NavbarContent, NavbarItem } from '@heroui/navbar';
-import { ThemeSwitch } from '@/components/theme-switch';
+import { ThemeSwitch } from './theme-switch';
 import { Image } from '@heroui/image';
-import Logo from '@/assets/logo.jpg';
+import Logo from '../assets/logo.jpg';
 import { useNavigate } from 'react-router-dom';
-import LogOutButton from '@/components/auth/logOut.tsx';
+import LogOutButton from './auth/logOut.tsx';
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase/firebase.ts';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -60,13 +60,13 @@ export const Navbar = () => {
                     )}
                     {user && (
                         <>
-                            <Link color="foreground" href="/">
+                            <Link color="foreground" href="/public">
                                 Matches
                             </Link>
                             <Link color="foreground" href="/players">
                                 Players
                             </Link>
-                            <Link color="foreground" href="/">
+                            <Link color="foreground" href="/public">
                                 About
                             </Link>
                         </>

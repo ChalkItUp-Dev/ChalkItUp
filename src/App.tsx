@@ -1,10 +1,10 @@
-import LoginPage from './pages/login.tsx';
+import LoginPage from './pages/login';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import RegisterPage from './pages/register.tsx';
-import { AuthProvider, useAuth } from './contexts/authContext/index.tsx';
-import IndexPage from '@/pages/index.tsx';
-import PlayerPage from '@/pages/player.tsx';
+import RegisterPage from './pages/register';
+import { AuthProvider, useAuth } from './contexts/authContext/index';
+import IndexPage from './pages/index';
+import PlayerPage from './pages/player';
 
 const App = () => {
     return (

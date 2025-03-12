@@ -23,6 +23,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "ChalkItUp/src"
+  ],
+  "references": [{ "path": "./tsconfig.node.json"}]
 }
