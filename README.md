@@ -1,3 +1,9 @@
+# General infromation
+Try [ChalkItUp.](https://chalkitup.onrender.com) <br/>
+[Backend-Repo.](https://github.com/JFidan/chalkItUp-Backend/blob/main/README.md)
+
+
+***
 # Vite & HeroUI Template
 
 This is a template for creating applications using Vite and HeroUI (v2).
