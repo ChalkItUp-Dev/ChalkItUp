@@ -1,26 +1,22 @@
 export interface Player {
-    PlayerID: number;
-    FirstName: string;
-    LastName: string;
+    id: string;
+    userId: string;
+    username: string;
+    email: string;
+    winRate: number;
 }
 
 export interface Game {
-    GameID: number;
-    Winner: number;
-    Loser: number;
+    id: string;
+    winner: string;
+    loser: string;
 }
 
-export interface GameStats {
-    Player1: number;
-    Player2: number;
-    Wins_P1: number;
-    Wins_P2: number;
-}
 
-const API_URL = 'https://chalkitupserver.onrender.com'; //'http://localhost:3000';
+const API_URL = 'https://chalkitup-backend.onrender.com/api'; //'http://localhost:3000';
 
 export const fetchPlayers = async (): Promise<Player[]> => {
-    const response = await fetch(`${API_URL}/players`);
+    const response = await fetch(`${API_URL}/player/all`);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spieler');
     }
@@ -28,7 +24,7 @@ export const fetchPlayers = async (): Promise<Player[]> => {
 };
 
 export const fetchGames = async (): Promise<Game[]> => {
-    const response = await fetch(`${API_URL}/games`);
+    const response = await fetch(`${API_URL}/games/all`);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spiele');
     }
@@ -36,13 +32,14 @@ export const fetchGames = async (): Promise<Game[]> => {
 };
 
 export const savePlayer = async (
-    firstName: string,
-    lastName: string
+    userId: string,
+    username: string,
+    email: string
 ): Promise<void> => {
-    const response = await fetch(`${API_URL}/save-player`, {
+    const response = await fetch(`${API_URL}/player`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName }),
+        body: JSON.stringify({ userId, username, email }),
     });
     if (!response.ok) {
         throw new Error('Fehler beim Speichern des Spielers');
@@ -63,16 +60,8 @@ export const saveGame = async (
     }
 };
 
-export const fetchGameStats = async (): Promise<GameStats[]> => {
-    const response = await fetch(`${API_URL}/player-stats`);
-    if (!response.ok) {
-        throw new Error('Fehler beim Abrufen der Spiele');
-    }
-    return response.json();
-};
-
 export const updatePlayer = async (
-    playerId: number,
+    playerId: string,
     firstName: string,
     lastName: string
 ): Promise<void> => {

@@ -1,8 +1,7 @@
 import DefaultLayout from '../layouts/default';
 import {
-    fetchGameStats,
-    fetchPlayers,
-    GameStats,
+    fetchGames,
+    fetchPlayers, Game,
     Player,
     saveGame,
 } from '../service/api.service';
@@ -14,146 +13,117 @@ import { Progress } from '@heroui/progress';
 import {
     Modal,
     ModalBody,
-    ModalContent,
-    ModalFooter,
+    ModalContent, ModalFooter,
     ModalHeader,
     useDisclosure,
 } from '@heroui/modal';
+import { BiPlus } from 'react-icons/bi';
+import { Select, SelectItem } from '@heroui/react';
 
 export default function IndexPage() {
-    const defaultGame: GameStats = {
-        Player1: 0,
-        Player2: 0,
-        Wins_P1: 0,
-        Wins_P2: 0,
-    };
 
-    const [gameStats, setGameStats] = useState<GameStats[]>([]);
     const [player, setPlayer] = useState<Player[]>([]);
+    const [games, setGames] = useState<Game[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [selectedGame, setSelectedGame] = useState<GameStats>(defaultGame);
 
     const submitStat = (winner: number, loser: number) => {
         saveGame(winner, loser).then(() => {
-            setSelectedGame(defaultGame);
+
             console.log('Update success');
         });
     };
 
     useEffect(() => {
-        fetchGameStats().then((stats) => {
-            setGameStats(stats);
-        });
         fetchPlayers().then((player) => {
             setPlayer(player);
         });
-    }, [selectedGame]);
-
-    const findePlayer = (id: number) => {
-        const p = player.find((x) => id === x.PlayerID);
-
-        if (p) return p;
-    };
+        fetchGames().then(game => {
+            setGames(game);
+        })
+    }, []);
+    const findePlayer = (id: string) => {
+        return player.find((player) => player.userId === id);
+    }
 
     return (
         <DefaultLayout>
-            {gameStats.map((stat, index) => {
+            {games.map((stat, index) => {
                 return (
                     <div
                         className="flex w-full justify-center "
                         key={index + ' Card'}
-                        onClick={() => {
-                            setSelectedGame(stat);
-                            onOpen();
-                        }}
                     >
                         <Card className="w-full max-w-[400px] mb-4">
                             <CardHeader className="flex gap-3">
                                 <div className="flex flex-row justify-between w-full">
                                     <p className="text-md">
-                                        {findePlayer(stat.Player1)?.FirstName}
+                                        {findePlayer(stat.winner)?.username}
                                     </p>
                                     <p className="text-md">vs</p>
                                     <p className="text-md">
-                                        {findePlayer(stat.Player2)?.FirstName}
+                                        {findePlayer(stat.loser)?.username}
                                     </p>
                                 </div>
                             </CardHeader>
                             <Divider />
                             <CardBody>
                                 <div className="flex flex-row justify-between w-full">
-                                    <p className="text-md">{stat.Wins_P1}</p>
-                                    <p className="text-md">{stat.Wins_P2}</p>
+                                    <p className="text-md">{stat.winner}</p>
+                                    <p className="text-md">{stat.loser}</p>
                                 </div>
                                 <Progress
-                                    aria-label="Loading..."
-                                    color="primary"
+                                    color="success"
                                     value={
-                                        (stat.Wins_P1 /
-                                            (stat.Wins_P1 + stat.Wins_P2)) *
                                         100
                                     }
                                 />
                             </CardBody>
                         </Card>
+
                     </div>
                 );
             })}
+            <div className="fixed bottom-24 right-4">
+                <Button className="rounded-full shadow-xl bg-green-500 font-bold text-xl " isIconOnly  onPress={() => {
+                    onOpen();
+                }} >
+                    <BiPlus/>
+                </Button>
+            </div>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} radius={"sm"} >
                 <ModalContent>
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                Who had won the game?
+                                Start new game
                             </ModalHeader>
-                            <ModalBody>
-                                <Button
-                                    color="primary"
-                                    variant="bordered"
-                                    onPress={() => {
-                                        onClose();
-                                        submitStat(
-                                            selectedGame.Player1,
-                                            selectedGame.Player2
-                                        );
-                                    }}
-                                >
-                                    {
-                                        findePlayer(selectedGame.Player1)
-                                            ?.FirstName
-                                    }
-                                </Button>
-                                <Button
-                                    color="primary"
-                                    variant="bordered"
-                                    onPress={() => {
-                                        onClose();
-                                        submitStat(
-                                            selectedGame.Player2,
-                                            selectedGame.Player1
-                                        );
-                                    }}
-                                >
-                                    {
-                                        findePlayer(selectedGame.Player2)
-                                            ?.FirstName
-                                    }
-                                </Button>
+                            <ModalBody className="h-60">
+                                    <div >
+                                        <Select className="mb-6" label="Select Player1">
+                                            {player.map((p) => (
+                                                <SelectItem key={p.userId}>{p.username}</SelectItem>
+                                            ))}
+                                        </Select>
+                                        <Select className="mb-6" label="Select Player2">
+                                            {player.map((p) => (
+                                                <SelectItem key={p.userId}>{p.username}</SelectItem>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                    <div>
+                                        <Button color={"success"} variant={"flat"} fullWidth>
+                                            Start Game
+                                        </Button>
+                                    </div>
                             </ModalBody>
-                            <ModalFooter>
-                                <Button
-                                    color="danger"
-                                    variant="light"
-                                    onPress={onClose}
-                                >
-                                    Close
-                                </Button>
-                            </ModalFooter>
+                            <ModalFooter></ModalFooter>
                         </>
                     )}
                 </ModalContent>
             </Modal>
+
+
         </DefaultLayout>
     );
 }

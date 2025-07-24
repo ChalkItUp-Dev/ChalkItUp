@@ -1,12 +1,12 @@
 import DefaultLayout from "../layouts/default.tsx";
 import {doCreateUserWithEmailAndPassword} from "../firebase/auth.ts";
-import AuthForm from "../components/auth/signForm.tsx";
+import AuthFormRegister from '../components/auth/registerForm';
 
 function registerPage() {
     return (
         <DefaultLayout>
-            <AuthForm
-                buttonText="Sign Up"
+            <AuthFormRegister
+                buttonText="Register"
                 onSubmit={doCreateUserWithEmailAndPassword}
                 linkText="Already have an account? Sign in here."
                 linkTo="/login"
