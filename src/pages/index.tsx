@@ -2,14 +2,11 @@ import DefaultLayout from '../layouts/default';
 import {
     fetchGames,
     fetchPlayers, Game,
-    Player,
+    Player, PlayerGame,
     saveGame,
 } from '../service/api.service';
-import { useEffect, useState } from 'react';
-import { Card, CardHeader, CardBody } from '@heroui/card';
-import { Divider } from '@heroui/divider';
-import { Button } from '@heroui/button';
-import { Progress } from '@heroui/progress';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Button, Form, Tooltip } from '@heroui/react';
 import {
     Modal,
     ModalBody,
@@ -19,19 +16,13 @@ import {
 } from '@heroui/modal';
 import { BiPlus } from 'react-icons/bi';
 import { Select, SelectItem } from '@heroui/react';
+import GameCard from '../components/gameCard';
 
 export default function IndexPage() {
 
     const [player, setPlayer] = useState<Player[]>([]);
     const [games, setGames] = useState<Game[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-    const submitStat = (winner: number, loser: number) => {
-        saveGame(winner, loser).then(() => {
-
-            console.log('Update success');
-        });
-    };
 
     useEffect(() => {
         fetchPlayers().then((player) => {
@@ -40,58 +31,68 @@ export default function IndexPage() {
         fetchGames().then(game => {
             setGames(game);
         })
-    }, []);
-    const findePlayer = (id: string) => {
-        return player.find((player) => player.userId === id);
+    }, [isOpen]);
+
+    const [team1, setTeam1] = useState<string[]>([]);
+    const [team2, setTeam2] = useState<string[]>([]);
+
+    const handleSelectionChangeForTeam1 = (e: ChangeEvent<HTMLSelectElement>) => {
+        setTeam1(e.target.value.split(','));
+    };
+
+    const handleSelectionChangeForTeam2 = (e: ChangeEvent<HTMLSelectElement>) => {
+        setTeam2(e.target.value.split(','));
+    };
+
+    const startNewGame = () => {
+        const players: PlayerGame[] = [];
+
+        if(team1.length  === 0 || team2.length === 0) return;
+
+        team1.forEach((p) => {
+            players.push({
+                userId: p,
+                team: 1,
+                winner: false,
+            })
+        })
+        team2.forEach((p) => {
+            players.push({
+                userId: p,
+                team: 2,
+                winner: false,
+            })
+        })
+        saveGame(players).then(() => console.log('Created success'));
     }
 
     return (
-        <DefaultLayout>
+        <DefaultLayout title={"Game history"}>
             {games.map((stat, index) => {
                 return (
                     <div
-                        className="flex w-full justify-center "
+                        className="flex w-full justify-center"
                         key={index + ' Card'}
                     >
-                        <Card className="w-full max-w-[400px] mb-4">
-                            <CardHeader className="flex gap-3">
-                                <div className="flex flex-row justify-between w-full">
-                                    <p className="text-md">
-                                        {findePlayer(stat.winner)?.username}
-                                    </p>
-                                    <p className="text-md">vs</p>
-                                    <p className="text-md">
-                                        {findePlayer(stat.loser)?.username}
-                                    </p>
-                                </div>
-                            </CardHeader>
-                            <Divider />
-                            <CardBody>
-                                <div className="flex flex-row justify-between w-full">
-                                    <p className="text-md">{stat.winner}</p>
-                                    <p className="text-md">{stat.loser}</p>
-                                </div>
-                                <Progress
-                                    color="success"
-                                    value={
-                                        100
-                                    }
-                                />
-                            </CardBody>
-                        </Card>
-
+                        <GameCard game={stat} player={player}  key={index + ' GameCard'}/>
                     </div>
                 );
             })}
             <div className="fixed bottom-24 right-4">
-                <Button className="rounded-full shadow-xl bg-green-500 font-bold text-xl " isIconOnly  onPress={() => {
-                    onOpen();
-                }} >
-                    <BiPlus/>
-                </Button>
+                <Tooltip content="Create new Game" >
+                    <Button
+                        className="rounded-full shadow-xl bg-green-500 font-bold text-xl "
+                        isIconOnly
+                        onPress={() => {
+                            onOpen();
+                        }}
+                    >
+                        <BiPlus />
+                    </Button>
+                </Tooltip>
             </div>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} radius={"sm"} >
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} radius={'sm'}>
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -99,31 +100,55 @@ export default function IndexPage() {
                                 Start new game
                             </ModalHeader>
                             <ModalBody className="h-60">
-                                    <div >
-                                        <Select className="mb-6" label="Select Player1">
-                                            {player.map((p) => (
-                                                <SelectItem key={p.userId}>{p.username}</SelectItem>
-                                            ))}
-                                        </Select>
-                                        <Select className="mb-6" label="Select Player2">
-                                            {player.map((p) => (
-                                                <SelectItem key={p.userId}>{p.username}</SelectItem>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                    <div>
-                                        <Button color={"success"} variant={"flat"} fullWidth>
-                                            Start Game
-                                        </Button>
-                                    </div>
+                                <Form>
+                                    <Select
+                                        className="mb-6"
+                                        label="Select Players for Team 1"
+                                        selectionMode="multiple"
+                                        isRequired
+                                        onChange={handleSelectionChangeForTeam1}
+                                    >
+                                        {player.map((p) => (
+                                            <SelectItem key={p.userId}>
+                                                {p.username}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Select
+                                        className="mb-6"
+                                        label="Select Players for Team 2"
+                                        selectionMode="multiple"
+                                        isRequired
+                                        onChange={handleSelectionChangeForTeam2}
+                                    >
+                                        {player.map((p) => (
+                                            <SelectItem key={p.userId}>
+                                                {p.username}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                </Form>
+                                <div>
+                                    <Button
+                                        color={'success'}
+                                        variant={'flat'}
+                                        fullWidth
+                                        disabled={team1.length === 0 || team2.length === 0}
+                                        type={"submit"}
+                                        onPress={() => {
+                                            startNewGame();
+                                            onClose();
+                                        }}
+                                    >
+                                        Start Game
+                                    </Button>
+                                </div>
                             </ModalBody>
                             <ModalFooter></ModalFooter>
                         </>
                     )}
                 </ModalContent>
             </Modal>
-
-
         </DefaultLayout>
     );
 }

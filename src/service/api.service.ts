@@ -3,17 +3,23 @@ export interface Player {
     userId: string;
     username: string;
     email: string;
-    winRate: number;
 }
 
 export interface Game {
     id: string;
-    winner: string;
-    loser: string;
+    players: PlayerGame[];
+    endTime: Date;
+    createdAt: Date;
+}
+
+export interface PlayerGame {
+    userId: string;
+    team: number;
+    winner: boolean;
 }
 
 
-const API_URL = 'https://chalkitup-backend.onrender.com/api'; //'http://localhost:3000';
+const API_URL = 'https://chalkitup-backend.onrender.com/api'; //' http://localhost:8080/api';
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/player/all`);
@@ -47,30 +53,42 @@ export const savePlayer = async (
 };
 
 export const saveGame = async (
-    winner: number,
-    loser: number
+players: PlayerGame[],
 ): Promise<void> => {
-    const response = await fetch(`${API_URL}/save-game`, {
+    const response = await fetch(`${API_URL}/games`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ winner, loser }),
+        body: JSON.stringify({ players }),
     });
     if (!response.ok) {
         throw new Error('Fehler beim Speichern des Spiels');
     }
 };
 
-export const updatePlayer = async (
-    playerId: string,
-    firstName: string,
-    lastName: string
+export const updateGame = async (
+    game: Game,
 ): Promise<void> => {
-    const response = await fetch(`${API_URL}/updateplayer`, {
+    const response = await fetch(`${API_URL}/games`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, firstName, lastName }),
+        body: JSON.stringify(game),
     });
     if (!response.ok) {
-        throw new Error('Fehler beim Speichern des Spielers');
+        throw new Error('Fehler beim Speichern des Spiels');
     }
 };
+//
+// export const updatePlayer = async (
+//     playerId: string,
+//     firstName: string,
+//     lastName: string
+// ): Promise<void> => {
+//     const response = await fetch(`${API_URL}/updateplayer`, {
+//         method: 'PUT',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ playerId, firstName, lastName }),
+//     });
+//     if (!response.ok) {
+//         throw new Error('Fehler beim Speichern des Spielers');
+//     }
+// };

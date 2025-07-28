@@ -1,17 +1,16 @@
-import { Link } from '@heroui/link';
-import { Navbar as NavBar, NavbarContent, NavbarItem } from '@heroui/navbar';
-import { ThemeSwitch } from './theme-switch';
-import { Image } from '@heroui/image';
-import Logo from '../assets/logo.jpg';
-import { useNavigate } from 'react-router-dom';
-import LogOutButton from './auth/logOut.tsx';
-import { useState, useEffect } from 'react';
+import {
+    useState,
+    useEffect,
+} from 'react';
 import { auth } from '../firebase/firebase.ts';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
-export const Navbar = () => {
-    const [user, setUser] = useState<User | null>(null);
-    const navigate = useNavigate();
+function Navbar(
+    prop: {
+        title: string,
+    }
+) {
+    const [,setUser] = useState<User | null>(null);
 
     useEffect(() => {
         // Überwache den Authentifizierungsstatus
@@ -23,58 +22,11 @@ export const Navbar = () => {
         return () => unsubscribe();
     }, []);
 
-    const onHome = () => {
-        navigate('/');
-    };
-
     return (
-        <NavBar isBordered isBlurred={false}>
-            <NavbarContent
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%',
-                }}
-            >
-                <NavbarItem style={{ flexShrink: 0 }}>
-                    <Image
-                        src={Logo}
-                        alt="Logo"
-                        height="50px"
-                        onClick={onHome}
-                    />
-                </NavbarItem>
-                <NavbarItem
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-evenly',
-                        flexGrow: 1,
-                    }}
-                >
-                    {!user && location.pathname === '/register' && (
-                        <h2>Welcome to ChalkItUp!</h2>
-                    )}
-                    {!user && location.pathname === '/login' && (
-                        <h2>Welcome back!</h2>
-                    )}
-                    {user && (
-                        <>
-                            <Link color="foreground" href="/public">
-                                Matches
-                            </Link>
-                            <Link color="foreground" href="/players">
-                                Players
-                            </Link>
-                            <Link color="foreground" href="/public">
-                                About
-                            </Link>
-                        </>
-                    )}
-                </NavbarItem>
-                <ThemeSwitch />
-                {user && <LogOutButton />}
-            </NavbarContent>
-        </NavBar>
+        <>
+            <p className={'font-medium text-4xl ml-6 mt-4'}>{prop.title}</p>
+        </>
     );
 };
+
+export default Navbar;

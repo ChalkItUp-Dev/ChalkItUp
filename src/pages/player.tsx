@@ -5,6 +5,13 @@ import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Progress } from '@heroui/progress';
 
+export  interface  PlayerStats{
+    win: number
+    lose: number
+    winRate: string
+}
+
+
 export default function PlayerPage() {
     const [player, setPlayer] = useState<Player[]>([]);
     const [games, setGames] = useState<Game[]>([]);
@@ -12,21 +19,30 @@ export default function PlayerPage() {
     useEffect(() => {
         fetchPlayers().then((player) => {
             setPlayer(player);
-            player.forEach(player => player.winRate = winRate(player.userId))
         });
         fetchGames().then((games) => {
             setGames(games);
         });
     }, []);
 
-    const winRate = (playerId: string): number => {
-        let wins= games.filter((game) => game.winner === playerId).length;
-        let loses = games.filter((game) => game.loser === playerId).length;
-        return (wins + loses) > 0 ?  wins / (wins + loses) : 0;
+    const getPlayerStats = (playerId: string): PlayerStats => {
+
+        let win = 0;
+        let lose = 0;
+        games.forEach(game => {
+            win += game.players.filter(x =>x.userId === playerId && x.winner).length
+            lose +=  game.players.filter(x =>x.userId === playerId && x.winner === false).length
+        })
+        return {
+            win: win,
+            lose: lose,
+            winRate: (win / (win + lose)).toFixed(2),
+        }
     }
 
+
     return (
-        <DefaultLayout>
+        <DefaultLayout title={"Player Stats"}>
             {player.map((player, index) => {
                 return (
                     <div className="flex w-full justify-center " key={index}>
@@ -34,7 +50,7 @@ export default function PlayerPage() {
                             className=" max-w-[800px] mb-4 border "
                             fullWidth
                             radius={'sm'}
-                            shadow={"none"}
+                            shadow={'none'}
                         >
                             <CardHeader className="flex gap-3">
                                 <div className={'w-full'}>
@@ -47,21 +63,44 @@ export default function PlayerPage() {
                                                 'text-green-500 text-xl font-semibold'
                                             }
                                         >
-                                            {player.winRate}
+                                            {
+                                                getPlayerStats(player.userId)
+                                                    .winRate
+                                            }
                                         </p>
                                     </div>
                                     <div className="flex flex-row justify-between w-full items-center">
-                                        <p>{games.filter((game) => game.winner === player.userId).length + games.filter((game) => game.winner === player.userId).length} Games</p>
-                                        <p> {games.filter((game) => game.winner === player.userId).length}W - {games.filter((game) => game.loser === player.userId).length}L</p>
+                                        <p>
+                                            {getPlayerStats(player.userId).win +
+                                                getPlayerStats(player.userId)
+                                                    .lose +
+                                                ' '}
+                                            Games
+                                        </p>
+                                        <p>
+                                            {getPlayerStats(player.userId).win}W
+                                            -{' '}
+                                            {getPlayerStats(player.userId).lose}
+                                            L
+                                        </p>
                                     </div>
                                 </div>
                             </CardHeader>
                             <Divider />
                             <CardBody>
                                 <Progress
+                                    aria-label={'WinRate'}
                                     radius={'sm'}
-                                    color={player.winRate > 0.5 ? 'success' : "danger"}
-                                    value={player.winRate * 100}
+                                    color={
+                                        0.49 <
+                                        +getPlayerStats(player.userId).winRate
+                                            ? 'success'
+                                            : 'danger'
+                                    }
+                                    value={
+                                        +getPlayerStats(player.userId).winRate *
+                                        100
+                                    }
                                 />
                                 <div
                                     className={
