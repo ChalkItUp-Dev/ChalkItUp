@@ -24,7 +24,10 @@ function Navbar(
 
     return (
         <>
-            <p className={'font-medium text-4xl ml-6 pt-4 mb-2 fixed z-50 h-16 bg-white w-full'}> {prop.title}</p>
+            <div className="flex justify-center ">
+                <p className={'font-medium text-4xl ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-[1024px]'}> {prop.title}</p>
+            </div>
+
         </>
     );
 };
