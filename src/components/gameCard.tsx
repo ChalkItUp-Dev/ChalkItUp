@@ -108,6 +108,8 @@ function GameCard(props: {
                             </ModalHeader>
                             <ModalBody className="h-60">
                                 <Button
+                                    color={"success"}
+                                    variant={'flat'}
                                     onPress={() => {
                                         endGame(1);
                                         onClose();
@@ -116,6 +118,8 @@ function GameCard(props: {
                                     Team 1
                                 </Button>
                                 <Button
+                                    color={"success"}
+                                    variant={'flat'}
                                     onPress={() => {
                                         endGame(2);
                                         onClose();

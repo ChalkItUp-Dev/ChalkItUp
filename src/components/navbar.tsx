@@ -24,7 +24,7 @@ function Navbar(
 
     return (
         <>
-            <p className={'font-medium text-4xl ml-6 mt-4'}>{prop.title}</p>
+            <p className={'font-medium text-4xl ml-6 pt-4 mb-2 fixed z-50 h-16 bg-white w-full'}> {prop.title}</p>
         </>
     );
 };
