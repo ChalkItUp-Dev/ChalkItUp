@@ -1,17 +1,17 @@
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Divider } from '@heroui/divider';
-import { Game, Player, updateGame } from '../service/api.service';
+import { GameHistory, updateGame } from '../service/api.service';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/modal';
 import { Button, Tooltip } from '@heroui/react';
 import { FaTrophy } from 'react-icons/fa6';
+import { RiBilliardsFill } from 'react-icons/ri';
 
 function GameCard(props: {
-    game: Game;
-    player: Player[];
+    game: GameHistory;
 }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const endGame = (team: number) => {
 
+    const endGame = (team: number) => {
         props.game.players.forEach((p) => {
             if(p.team === team) p.winner = true;
 
@@ -26,7 +26,7 @@ function GameCard(props: {
             <Card className="w-full max-w-[400px] mb-4 border" shadow={'none'}>
                 <CardHeader className="flex gap-3">
                     <div className="flex flex-row justify-between w-full items-center">
-                        <p className="text-md">Game</p>
+                        <p className="text-md flex flex-row items-center">Game <RiBilliardsFill size={24} className={"ml-1"}/> </p>
                         {!props.game.endTime &&
                             <Tooltip content="Set winner" showArrow={true}>
                             <Button
@@ -37,7 +37,7 @@ function GameCard(props: {
                                     onOpen();
                                 }}
                             >
-                                <FaTrophy />
+                                <FaTrophy size={20} />
                             </Button>
                         </Tooltip>}
 
@@ -46,55 +46,53 @@ function GameCard(props: {
                 <Divider />
                 <CardBody>
                     <div className="flex flex-row justify-between align-middle items-center w-full">
-                        { props.game.players.find(x => x.winner)?.team == 1 &&
-                            <div className={'mr-1 text-green-500'}>
-                                <FaTrophy />
-                            </div>
-                        }
-                        <div className="w-1/3">
+
+                        <div className="w-3/7 flex flex-row">
+                            { props.game.players.find(x => x.winner)?.team == 1 &&
+                                <div className={'mr-1 text-green-500'}>
+                                    <FaTrophy size={24} />
+                                </div>
+                            }
                             {props.game.players
                                 .filter((p1) => p1.team === 1)
                                 .map((p1) => {
                                     return (
                                         <p
                                             className="flex flex-row w-full items-center"
-                                            key={p1.userId}
+                                            key={p1.player.userId}
                                         >
                                             {
-                                                props.player.find(
-                                                    (p) =>
-                                                        p.userId === p1.userId
-                                                )?.username
-                                            }{' '}
+                                               p1.player.username
+                                            }
                                         </p>
                                     );
                                 })}
                         </div>
-                        <p className="w-1/3 text-center">vs</p>
-                        <div className="w-1/3 ">
+                        <p className="w-1/7 text-center">vs</p>
+                        <div className="w-3/7 flex flex-row items-center justify-end">
+                            <div>
                             {props.game.players
                                 .filter((p2) => p2.team === 2)
                                 .map((p2) => {
                                     return (
                                         <p
                                             className="flex flex-row w-full items-center justify-end"
-                                            key={p2.userId}
+                                            key={p2.player.userId}
                                         >
                                             {
-                                                props.player.find(
-                                                    (p) =>
-                                                        p.userId === p2.userId
-                                                )?.username
-                                            }{' '}
+                                                p2.player.username
+                                            }
                                         </p>
                                     );
                                 })}
+                            </div>
+                            {props.game.players.find(x => x.winner)?.team == 2 &&
+                                <div className={'ml-1 text-green-500'}>
+                                    <FaTrophy size={24} />
+                                </div>
+                            }
                         </div>
-                        {props.game.players.find(x => x.winner)?.team == 2 &&
-                        <div className={'ml-1 text-green-500'}>
-                            <FaTrophy />
-                        </div>
-                        }
+
                     </div>
                 </CardBody>
             </Card>

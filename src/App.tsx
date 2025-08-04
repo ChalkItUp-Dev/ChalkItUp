@@ -5,6 +5,7 @@ import RegisterPage from './pages/register';
 import { AuthProvider, useAuth } from './contexts/authContext/index';
 import IndexPage from './pages/index';
 import PlayerPage from './pages/player';
+import ProfilePage from './pages/profile';
 
 const App = () => {
     return (
@@ -42,6 +43,14 @@ const App = () => {
                     element={
                         <ProtectedRoute>
                             <PlayerPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
                         </ProtectedRoute>
                     }
                 />

@@ -2,6 +2,7 @@ import { Link } from "@heroui/link";
 import "./footer.css"
 import { GrScorecard } from 'react-icons/gr';
 import { BiHome, BiTrophy } from 'react-icons/bi';
+import { PiGearBold } from 'react-icons/pi';
 
 export function Footer() {
     return (
@@ -11,6 +12,7 @@ export function Footer() {
                     <Link href="/"><GrScorecard size={36} color={"black"}/></Link>
                     <Link href="/"><BiHome size={36} color={"black"}/></Link>
                     <Link href="/players"><BiTrophy size={36} color={"black"}/></Link>
+                    <Link href="/profile"><PiGearBold size={36} color={"black"}/></Link>
                 </div>
             </footer>
         </div>

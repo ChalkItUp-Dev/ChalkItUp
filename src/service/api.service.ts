@@ -3,6 +3,10 @@ export interface Player {
     userId: string;
     username: string;
     email: string;
+    winsCount: number;
+    lossesCount: number;
+    winRate: number;
+    lastWins: boolean[];
 }
 
 export interface Game {
@@ -18,8 +22,21 @@ export interface PlayerGame {
     winner: boolean;
 }
 
+export interface GameHistory {
+    id: string;
+    players: PlayerGameDTO[];
+    endTime: Date;
+}
 
-const API_URL = 'https://chalkitup-backend.onrender.com/api'; //' http://localhost:8080/api';
+export interface PlayerGameDTO {
+    player: Player;
+    team: number;
+    winner: boolean;
+}
+
+
+
+const API_URL = 'http://localhost:8080/api'; //' http://localhost:8080/api  https://chalkitup-backend.onrender.com/api';
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/player/all`);
@@ -29,7 +46,24 @@ export const fetchPlayers = async (): Promise<Player[]> => {
     return response.json();
 };
 
-export const fetchGames = async (): Promise<Game[]> => {
+export const fetchPlayer = async (userId: string): Promise<Player> => {
+    const response = await fetch(`${API_URL}/player/`+userId);
+    if (!response.ok) {
+        throw new Error('Fehler beim Abrufen der Spieler');
+    }
+    return response.json();
+};
+
+export const checkUsername = async (username: string): Promise<string> => {
+    if (!username) return "";
+    const response = await fetch(`${API_URL}/player/check-username/`+username);
+    if (!response.ok) {
+        throw new Error('Fehler beim Abrufen der Spieler');
+    }
+    return response.text();
+};
+
+export const fetchGames = async (): Promise<GameHistory[]> => {
     const response = await fetch(`${API_URL}/games/all`);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spiele');
@@ -66,8 +100,9 @@ players: PlayerGame[],
 };
 
 export const updateGame = async (
-    game: Game,
+    game: GameHistory,
 ): Promise<void> => {
+    console.log(game);
     const response = await fetch(`${API_URL}/games`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -77,6 +112,22 @@ export const updateGame = async (
         throw new Error('Fehler beim Speichern des Spiels');
     }
 };
+
+export const updatePlayer = async (
+    player: Player,
+): Promise<void> => {
+    const response = await fetch(`${API_URL}/player`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(player),
+    });
+    if (!response.ok) {
+        throw new Error('Fehler beim Speichern des Spiels');
+    }
+};
+
+
+
 //
 // export const updatePlayer = async (
 //     playerId: string,

@@ -11,7 +11,7 @@ export default function DefaultLayout({
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar title={title} />
-            <main className="flex-grow container mx-auto max-w-7xl px-6 mt-[100px]">
+            <main className="flex-grow container mx-auto max-w-7xl px-6 mt-[100px] pb-12">
                 {children}
             </main>
             <Footer />

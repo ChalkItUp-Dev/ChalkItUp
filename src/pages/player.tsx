@@ -1,48 +1,27 @@
 import DefaultLayout from '../layouts/default';
-import { fetchGames, fetchPlayers, Game, Player } from '../service/api.service';
+import { fetchPlayers, Player } from '../service/api.service';
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Progress } from '@heroui/progress';
 
-export  interface  PlayerStats{
-    win: number
-    lose: number
-    winRate: string
+export interface PlayerStats {
+    win: number;
+    lose: number;
+    winRate: number;
 }
-
 
 export default function PlayerPage() {
     const [player, setPlayer] = useState<Player[]>([]);
-    const [games, setGames] = useState<Game[]>([]);
 
     useEffect(() => {
         fetchPlayers().then((player) => {
             setPlayer(player);
         });
-        fetchGames().then((games) => {
-            setGames(games);
-        });
     }, []);
 
-    const getPlayerStats = (playerId: string): PlayerStats => {
-
-        let win = 0;
-        let lose = 0;
-        games.forEach(game => {
-            win += game.players.filter(x =>x.userId === playerId && x.winner).length
-            lose +=  game.players.filter(x =>x.userId === playerId && x.winner === false).length
-        })
-        return {
-            win: win,
-            lose: lose,
-            winRate: (win / (win + lose)).toFixed(2),
-        }
-    }
-
-
     return (
-        <DefaultLayout title={"Player Stats"}>
+        <DefaultLayout title={'Player Stats'}>
             {player.map((player, index) => {
                 return (
                     <div className="flex w-full justify-center " key={index}>
@@ -60,28 +39,21 @@ export default function PlayerPage() {
                                         </p>
                                         <p
                                             className={
-                                                'text-green-500 text-xl font-semibold'
+                                                'text-success text-xl font-semibold'
                                             }
                                         >
-                                            {
-                                                getPlayerStats(player.userId)
-                                                    .winRate
-                                            }
+                                            {player.winRate}
                                         </p>
                                     </div>
                                     <div className="flex flex-row justify-between w-full items-center">
                                         <p>
-                                            {getPlayerStats(player.userId).win +
-                                                getPlayerStats(player.userId)
-                                                    .lose +
-                                                ' '}
-                                            Games
+                                            {player.winsCount +
+                                                player.lossesCount}{' '}
+                                            Game(s)
                                         </p>
                                         <p>
-                                            {getPlayerStats(player.userId).win}W
-                                            -{' '}
-                                            {getPlayerStats(player.userId).lose}
-                                            L
+                                            {player.winsCount}W -{' '}
+                                            {player.lossesCount}L
                                         </p>
                                     </div>
                                 </div>
@@ -92,32 +64,37 @@ export default function PlayerPage() {
                                     aria-label={'WinRate'}
                                     radius={'sm'}
                                     color={
-                                        0.49 <
-                                        +getPlayerStats(player.userId).winRate
+                                        0.49 < player.winRate
                                             ? 'success'
                                             : 'danger'
                                     }
-                                    value={
-                                        +getPlayerStats(player.userId).winRate *
-                                        100
-                                    }
+                                    value={player.winRate * 100}
                                 />
+
                                 <div
                                     className={
-                                        'text-xs flex flex-row items-center mt-2'
+                                        'flex flex-row items-center mt-2'
                                     }
                                 >
-                                    Recent:
+                                    <div className={'text-xs'}>Recent:</div>
                                     <div
                                         className={
-                                            ' ml-2 rounded-full bg-green-500 w-3 h-3'
+                                            'flex flex-row items-center center h-full'
                                         }
-                                    ></div>
-                                    <div
-                                        className={
-                                            ' ml-1 rounded-full bg-green-500 w-3 h-3'
-                                        }
-                                    ></div>
+                                    >
+                                        {player.lastWins.slice(0, 15).map((game, index) => {
+                                            return (
+                                                <div
+                                                    key={game + ' ' + index}
+                                                    className={
+                                                        game
+                                                            ? ' ml-1 rounded-full bg-success w-3 h-3'
+                                                            : ' ml-1 rounded-full bg-danger w-3 h-3'
+                                                    }
+                                                ></div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </CardBody>
                         </Card>

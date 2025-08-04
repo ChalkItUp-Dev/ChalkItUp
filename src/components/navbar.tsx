@@ -24,8 +24,8 @@ function Navbar(
 
     return (
         <>
-            <div className="flex justify-center ">
-                <p className={'font-medium text-4xl ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-[1024px]'}> {prop.title}</p>
+            <div className="flex justify-center">
+                <p className={'font-medium text-4xl ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background max-w-[1024px] min-w-96'}> {prop.title}</p>
             </div>
 
         </>
