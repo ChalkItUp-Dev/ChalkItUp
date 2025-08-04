@@ -36,7 +36,7 @@ export interface PlayerGameDTO {
 
 
 
-const API_URL = 'http://localhost:8080/api'; //' http://localhost:8080/api  https://chalkitup-backend.onrender.com/api';
+const API_URL = 'https://chalkitup-backend.onrender.com/api'; //' http://localhost:8080/api  ';
 
 export const fetchPlayers = async (): Promise<Player[]> => {
     const response = await fetch(`${API_URL}/player/all`);
