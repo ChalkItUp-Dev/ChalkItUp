@@ -3,9 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import RegisterPage from './pages/register';
 import { AuthProvider, useAuth } from './contexts/authContext/index';
-import IndexPage from './pages/index';
+import HistoryPage from './pages/history';
 import PlayerPage from './pages/player';
 import ProfilePage from './pages/profile';
+import WelcomePage from './pages/welcome';
 
 const App = () => {
     return (
@@ -34,7 +35,15 @@ const App = () => {
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <IndexPage />
+                            <WelcomePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/games"
+                    element={
+                        <ProtectedRoute>
+                            <HistoryPage />
                         </ProtectedRoute>
                     }
                 />

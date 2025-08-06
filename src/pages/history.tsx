@@ -21,7 +21,7 @@ import { BiPlus } from 'react-icons/bi';
 import { Select, SelectItem } from '@heroui/react';
 import GameCard from '../components/gameCard';
 
-export default function IndexPage() {
+export default function HistoryPage() {
     const [player, setPlayer] = useState<Player[]>([]);
     const [games, setGames] = useState<GameHistory[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -80,10 +80,7 @@ export default function IndexPage() {
                         className="flex w-full justify-center"
                         key={index + ' Card'}
                     >
-                        <GameCard
-                            game={stat}
-                            key={index + ' GameCard'}
-                        />
+                        <GameCard game={stat} key={index + ' GameCard'} />
                     </div>
                 );
             })}
