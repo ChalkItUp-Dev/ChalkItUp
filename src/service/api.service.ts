@@ -34,12 +34,20 @@ export interface PlayerGameDTO {
     winner: boolean;
 }
 
-
-
 const API_URL = 'https://chalkitup-backend.onrender.com/api'; //' http://localhost:8080/api  ';
 
+const fetchWithSpinner = async (url: string, options?: RequestInit) => {
+    window.dispatchEvent(new CustomEvent('request-start'));
+    try {
+        const response = await fetch(url, options);
+        return response;
+    } finally {
+        window.dispatchEvent(new CustomEvent('request-end'));
+    }
+};
+
 export const fetchPlayers = async (): Promise<Player[]> => {
-    const response = await fetch(`${API_URL}/player/all`);
+    const response = await fetchWithSpinner(`${API_URL}/player/all`);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spieler');
     }
@@ -47,7 +55,7 @@ export const fetchPlayers = async (): Promise<Player[]> => {
 };
 
 export const fetchPlayer = async (userId: string): Promise<Player> => {
-    const response = await fetch(`${API_URL}/player/`+userId);
+    const response = await fetchWithSpinner(`${API_URL}/player/` + userId);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spieler');
     }
@@ -55,8 +63,10 @@ export const fetchPlayer = async (userId: string): Promise<Player> => {
 };
 
 export const checkUsername = async (username: string): Promise<string> => {
-    if (!username) return "";
-    const response = await fetch(`${API_URL}/player/check-username/`+username);
+    if (!username) return '';
+    const response = await fetchWithSpinner(
+        `${API_URL}/player/check-username/` + username
+    );
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spieler');
     }
@@ -64,7 +74,7 @@ export const checkUsername = async (username: string): Promise<string> => {
 };
 
 export const fetchGames = async (): Promise<GameHistory[]> => {
-    const response = await fetch(`${API_URL}/games/all`);
+    const response = await fetchWithSpinner(`${API_URL}/games/all`);
     if (!response.ok) {
         throw new Error('Fehler beim Abrufen der Spiele');
     }
@@ -76,7 +86,7 @@ export const savePlayer = async (
     username: string,
     email: string
 ): Promise<void> => {
-    const response = await fetch(`${API_URL}/player`, {
+    const response = await fetchWithSpinner(`${API_URL}/player`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, username, email }),
@@ -86,10 +96,8 @@ export const savePlayer = async (
     }
 };
 
-export const saveGame = async (
-players: PlayerGame[],
-): Promise<void> => {
-    const response = await fetch(`${API_URL}/games`, {
+export const saveGame = async (players: PlayerGame[]): Promise<void> => {
+    const response = await fetchWithSpinner(`${API_URL}/games`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ players }),
@@ -99,11 +107,9 @@ players: PlayerGame[],
     }
 };
 
-export const updateGame = async (
-    game: GameHistory,
-): Promise<void> => {
+export const updateGame = async (game: GameHistory): Promise<void> => {
     console.log(game);
-    const response = await fetch(`${API_URL}/games`, {
+    const response = await fetchWithSpinner(`${API_URL}/games`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(game),
@@ -113,10 +119,8 @@ export const updateGame = async (
     }
 };
 
-export const updatePlayer = async (
-    player: Player,
-): Promise<void> => {
-    const response = await fetch(`${API_URL}/player`, {
+export const updatePlayer = async (player: Player): Promise<void> => {
+    const response = await fetchWithSpinner(`${API_URL}/player`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(player),
@@ -125,8 +129,6 @@ export const updatePlayer = async (
         throw new Error('Fehler beim Speichern des Spiels');
     }
 };
-
-
 
 //
 // export const updatePlayer = async (

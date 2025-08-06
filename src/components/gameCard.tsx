@@ -5,7 +5,6 @@ import {
     Modal,
     ModalBody,
     ModalContent,
-    ModalFooter,
     ModalHeader,
     useDisclosure,
 } from '@heroui/modal';

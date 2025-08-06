@@ -7,12 +7,22 @@ import HistoryPage from './pages/history';
 import PlayerPage from './pages/player';
 import ProfilePage from './pages/profile';
 import WelcomePage from './pages/welcome';
+import GlobalSpinner from './components/spinner';
 
 const App = () => {
     return (
         <AuthProvider>
+            <GlobalSpinner />
             <Routes>
-                {/* Login & Register nur für nicht eingeloggte Nutzer */}
+                {/* Public routes */}
+                <Route
+                    path="/welcome"
+                    element={
+                        <RedirectIfAuthenticated>
+                            <WelcomePage />
+                        </RedirectIfAuthenticated>
+                    }
+                />
                 <Route
                     path="/login"
                     element={
@@ -77,7 +87,7 @@ const RedirectIfAuthenticated = ({ children }: { children: JSX.Element }) => {
 // 🔹 Schützt private Routen
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const { currentUser } = useAuth();
-    return currentUser ? children : <Navigate to="/login" replace />;
+    return currentUser ? children : <Navigate to="/welcome" replace />;
 };
 
 export default App;
