@@ -57,7 +57,7 @@ function ProfilePage() {
             if (username) setIsValid(true);
             else setIsValid(false);
         });
-        return isValid; 
+        return isValid;
     };
 
     return (
@@ -70,6 +70,11 @@ function ProfilePage() {
                         onChange={handleInputChange}
                         disabled={disabled}
                         readOnly={disabled}
+                        classNames={{
+                            inputWrapper: [
+                                disabled ? 'bg-zinc-200' : 'bg-background',
+                            ],
+                        }}
                         endContent={
                             disabled ? (
                                 <Button
@@ -95,8 +100,8 @@ function ProfilePage() {
                             if (value.length < 3) {
                                 return 'Username must be at least 3 characters long';
                             }
-                            if(checkIfUserNameExist(value)) {
-                                return "Username exist"
+                            if (checkIfUserNameExist(value)) {
+                                return 'Username exist';
                             }
                             return null;
                         }}
