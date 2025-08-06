@@ -7,7 +7,7 @@ import { FaGear } from 'react-icons/fa6';
 export function Footer() {
     return (
         <div className="footerd bg-background z-50 w-full pb-2 pt-2 ">
-            <footer className="flex justify-center w-full h-12">
+            <footer className="flex w-full h-12">
                 <div className="flex flex-row items-center justify-center w-full footere border rounded-full space-x-8">
                     <Link href="/games">
                         <FaChartBar size={36} color={'black'} />

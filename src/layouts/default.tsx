@@ -9,7 +9,7 @@ export default function DefaultLayout({
     title: string;
 }) {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen max-w-[1024px] mx-auto">
             <Navbar title={title} />
             <main className="flex-grow container mx-auto max-w-7xl px-6 mt-[100px] pb-12 bg-background">
                 {children}
