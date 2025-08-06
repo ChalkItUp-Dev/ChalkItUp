@@ -33,19 +33,17 @@ function GameCard(props: { game: GameHistory }) {
             >
                 <CardHeader className="flex gap-3 justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <RiBilliardsFill size={24} className="text-zinc-500" />
+                        <RiBilliardsFill size={24} />
                         <p className="text-md font-semibold">Match</p>
                     </div>
                     {!props.game.endTime && (
                         <Tooltip content="Set winner" showArrow={true}>
                             <Button
-                                isIconOnly
                                 variant={'flat'}
                                 color={'success'}
                                 onPress={onOpen}
-                                className="bg-transparent"
                             >
-                                <FaTrophy size={20} />
+                                Declare Winner <FaTrophy size={20} />
                             </Button>
                         </Tooltip>
                     )}

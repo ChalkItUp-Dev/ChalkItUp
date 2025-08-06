@@ -64,7 +64,7 @@ export const fetchPlayer = async (userId: string): Promise<Player> => {
 
 export const checkUsername = async (username: string): Promise<string> => {
     if (!username) return '';
-    const response = await fetchWithSpinner(
+    const response = await fetch(
         `${API_URL}/player/check-username/` + username
     );
     if (!response.ok) {

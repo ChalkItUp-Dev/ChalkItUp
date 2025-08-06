@@ -23,7 +23,7 @@ const GlobalSpinner = () => {
 
     return (
         <div className="fixed inset-0  bg-opacity-50 z-50 flex justify-center items-center">
-            <Spinner size="lg" />
+            <Spinner variant="wave" size="lg" color="success" />
         </div>
     );
 };

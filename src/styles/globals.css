@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @config "../../tailwind.config.mjs";
 
+body {
+    height: 100vh;
+}
+
 body,
 .bg-background {
     background-color: #f4f4f5; /* Light Gray for light mode */

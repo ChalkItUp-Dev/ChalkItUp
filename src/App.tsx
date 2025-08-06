@@ -16,14 +16,6 @@ const App = () => {
             <Routes>
                 {/* Public routes */}
                 <Route
-                    path="/welcome"
-                    element={
-                        <RedirectIfAuthenticated>
-                            <WelcomePage />
-                        </RedirectIfAuthenticated>
-                    }
-                />
-                <Route
                     path="/login"
                     element={
                         <RedirectIfAuthenticated>
@@ -87,7 +79,7 @@ const RedirectIfAuthenticated = ({ children }: { children: JSX.Element }) => {
 // 🔹 Schützt private Routen
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const { currentUser } = useAuth();
-    return currentUser ? children : <Navigate to="/welcome" replace />;
+    return currentUser ? children : <Navigate to="/login" replace />;
 };
 
 export default App;
