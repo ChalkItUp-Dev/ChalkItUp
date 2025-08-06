@@ -8,7 +8,7 @@ function WelcomePage() {
     return (
         <>
             <DefaultLayout title="Chalk It Up">
-                <div className="mt-12">
+                <div className="flex justify-center">
                     <div className="grid grid-cols-1 gap-8 max-w-4xl mb-8">
                         <div className="flex flex-col items-center">
                             <Link href="/" className="flex flex-col">
