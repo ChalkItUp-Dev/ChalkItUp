@@ -12,11 +12,16 @@ import { Button, Tooltip } from '@heroui/react';
 import { FaTrophy } from 'react-icons/fa6';
 import { RiBilliardsFill } from 'react-icons/ri';
 import { GiChewedSkull } from 'react-icons/gi';
+import { useAuth } from '../contexts/authContext';
 
 function GameCard(props: { game: GameHistory }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { currentUser } = useAuth();
 
     const endGame = (team: number) => {
+        if (!props.game.players.find((x) => x.player.id === currentUser?.uid))
+            return;
+
         props.game.players.forEach((p) => {
             if (p.team === team) p.winner = true;
         });
@@ -39,6 +44,11 @@ function GameCard(props: { game: GameHistory }) {
                     {!props.game.endTime && (
                         <Tooltip content="Set winner" showArrow={true}>
                             <Button
+                                disabled={
+                                    !props.game.players.find(
+                                        (x) => x.player.id === currentUser?.uid
+                                    )
+                                }
                                 variant={'flat'}
                                 color={'success'}
                                 onPress={onOpen}

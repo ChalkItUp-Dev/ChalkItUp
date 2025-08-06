@@ -17,10 +17,10 @@ function Navbar(prop: { title: string }) {
 
     return (
         <>
-            <div className="flex justify-center">
+            <div className="bg-background w-full z-50">
                 <p
                     className={
-                        'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background max-w-[1024px] min-w-96'
+                        'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full'
                     }
                 >
                     {prop.title}

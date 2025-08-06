@@ -1,17 +1,27 @@
+import { FaHand } from 'react-icons/fa6';
 import DefaultLayout from '../layouts/default';
 import { FaChartBar, FaTrophy, FaUsers } from 'react-icons/fa';
+import { MdWavingHand } from 'react-icons/md';
 
 function WelcomePage() {
     return (
         <>
-            <DefaultLayout title="Welcome to Chalk It Up">
+            <DefaultLayout title="Chalk It Up">
                 <div className="mt-12">
-                    <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-                        Track your billiard scores easily and without
-                        complication.
-                    </p>
-
                     <div className="grid grid-cols-1 gap-8 max-w-4xl mb-8">
+                        <div className="flex flex-col items-center">
+                            <MdWavingHand
+                                size={40}
+                                className="text-fuchsia-500 mb-2"
+                            />
+                            <h2 className="text-xl font-semibold mb-1">
+                                Welcome
+                            </h2>
+                            <p>
+                                Track your billiard scores easily and without
+                                complication.
+                            </p>
+                        </div>
                         <div className="flex flex-col items-center">
                             <FaChartBar
                                 size={40}
