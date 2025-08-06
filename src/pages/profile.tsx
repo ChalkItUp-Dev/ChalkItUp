@@ -38,9 +38,9 @@ function ProfilePage() {
 
     useEffect(() => {
         if (currentUser)
-            fetchPlayers().then((p) => {
-                setPlayers(p);
-                const tmp = players.find((x) => x.userId === currentUser.uid);
+            fetchPlayers().then((player) => {
+                setPlayers(player);
+                const tmp = player.find((x) => x.userId === currentUser.uid);
                 if (tmp) setUser(tmp);
             });
     }, []);
@@ -57,7 +57,7 @@ function ProfilePage() {
             if (username) setIsValid(true);
             else setIsValid(false);
         });
-        return isValid;
+        return isValid; 
     };
 
     return (
