@@ -1,6 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @config "../../tailwind.config.mjs";
 
-.bg-default-400{
-    background-color: black;
+body,
+.bg-background {
+    background-color: #f4f4f5; /* Light Gray for light mode */
+}
+
+.dark body,
+.dark .bg-background {
+    background-color: #18181b; /* Dark Gray for dark mode */
 }

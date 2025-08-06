@@ -12,6 +12,7 @@ import {
 import { Button, Tooltip } from '@heroui/react';
 import { FaTrophy } from 'react-icons/fa6';
 import { RiBilliardsFill } from 'react-icons/ri';
+import { GiChewedSkull } from 'react-icons/gi';
 
 function GameCard(props: { game: GameHistory }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -27,76 +28,92 @@ function GameCard(props: { game: GameHistory }) {
 
     return (
         <>
-            <Card className="w-full max-w-[400px] mb-4 border" shadow={'none'}>
-                <CardHeader className="flex gap-3">
-                    <div className="flex flex-row justify-between w-full items-center">
-                        <p className="text-md flex flex-row items-center">
-                            Game{' '}
-                            <RiBilliardsFill size={24} className={'ml-1'} />{' '}
-                        </p>
-                        {!props.game.endTime && (
-                            <Tooltip content="Set winner" showArrow={true}>
-                                <Button
-                                    isIconOnly
-                                    variant={'bordered'}
-                                    color={'success'}
-                                    onPress={() => {
-                                        onOpen();
-                                    }}
-                                >
-                                    <FaTrophy size={20} />
-                                </Button>
-                            </Tooltip>
-                        )}
+            <Card
+                className="w-full max-w-[400px] mb-4 border-none shadow-lg dark:bg-zinc-900"
+                shadow={'none'}
+            >
+                <CardHeader className="flex gap-3 justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <RiBilliardsFill size={24} className="text-zinc-500" />
+                        <p className="text-md font-semibold">Match</p>
                     </div>
+                    {!props.game.endTime && (
+                        <Tooltip content="Set winner" showArrow={true}>
+                            <Button
+                                isIconOnly
+                                variant={'flat'}
+                                color={'success'}
+                                onPress={onOpen}
+                                className="bg-transparent"
+                            >
+                                <FaTrophy size={20} />
+                            </Button>
+                        </Tooltip>
+                    )}
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                    <div className="flex flex-row justify-between align-middle items-center w-full">
-                        <div className="w-3/7 flex flex-row items-center justify-start">
-                            {props.game.players.find((x) => x.winner)?.team ==
+                    <div className="flex w-full">
+                        {/* Team 1 */}
+                        <div className="w-2/5 flex flex-col items-center text-center">
+                            {props.game.players.find((x) => x.winner)?.team ===
                                 1 && (
-                                <div className={'mr-1 text-green-500'}>
-                                    <FaTrophy size={24} />
-                                </div>
+                                <FaTrophy
+                                    className="text-yellow-400 mb-2"
+                                    size={24}
+                                />
                             )}
-                            <div>
-                                {props.game.players
-                                    .filter((p1) => p1.team === 1)
-                                    .map((p1) => {
-                                        return (
-                                            <p
-                                                className="flex flex-row w-full items-center justify-start"
-                                                key={p1.player.userId}
-                                            >
-                                                {p1.player.username}
-                                            </p>
-                                        );
-                                    })}
-                            </div>
+                            {props.game.players.find((x) => x.winner)?.team !==
+                                1 &&
+                                props.game.endTime && (
+                                    <GiChewedSkull
+                                        className="text-danger mb-2"
+                                        size={24}
+                                    />
+                                )}
+                            {props.game.players
+                                .filter((p) => p.team === 1)
+                                .map((p) => (
+                                    <p
+                                        key={p.player.userId}
+                                        className="font-semibold text-lg"
+                                    >
+                                        {p.player.username}
+                                    </p>
+                                ))}
                         </div>
-                        <p className="w-1/7 text-center">vs</p>
-                        <div className="w-3/7 flex flex-row items-center justify-end">
-                            <div>
-                                {props.game.players
-                                    .filter((p2) => p2.team === 2)
-                                    .map((p2) => {
-                                        return (
-                                            <p
-                                                className="flex flex-row w-full items-center justify-end"
-                                                key={p2.player.userId}
-                                            >
-                                                {p2.player.username}
-                                            </p>
-                                        );
-                                    })}
-                            </div>
-                            {props.game.players.find((x) => x.winner)?.team ==
+
+                        <p className="w-1/5 justify-center font-bold text-zinc-500 text-2xl h-full flex  items-center">
+                            vs
+                        </p>
+
+                        {/* Team 2 */}
+                        <div className="w-2/5 flex flex-col items-center text-center">
+                            {props.game.players.find((x) => x.winner)?.team ===
                                 2 && (
-                                <div className={'ml-1 text-green-500'}>
-                                    <FaTrophy size={24} />
-                                </div>
+                                <FaTrophy
+                                    className="text-yellow-400 mb-2"
+                                    size={24}
+                                />
                             )}
+                            {props.game.players.find((x) => x.winner)?.team !==
+                                2 &&
+                                props.game.endTime && (
+                                    <GiChewedSkull
+                                        className="text-danger mb-2"
+                                        size={24}
+                                    />
+                                )}
+                            {props.game.players
+                                .filter((p) => p.team === 2)
+                                .map((p) => (
+                                    <p
+                                        key={p.player.userId}
+                                        className="font-semibold text-lg"
+                                    >
+                                        {p.player.username}
+                                    </p>
+                                ))}
                         </div>
                     </div>
                 </CardBody>
@@ -109,29 +126,32 @@ function GameCard(props: { game: GameHistory }) {
                             <ModalHeader className="flex flex-col gap-1">
                                 Who has won?
                             </ModalHeader>
-                            <ModalBody className="h-60">
-                                <Button
-                                    color={'success'}
-                                    variant={'flat'}
-                                    onPress={() => {
-                                        endGame(1);
-                                        onClose();
-                                    }}
-                                >
-                                    Team 1
-                                </Button>
-                                <Button
-                                    color={'success'}
-                                    variant={'flat'}
-                                    onPress={() => {
-                                        endGame(2);
-                                        onClose();
-                                    }}
-                                >
-                                    Team 2
-                                </Button>
+                            <ModalBody className="h-auto py-8">
+                                <div className="flex justify-around">
+                                    <Button
+                                        color={'success'}
+                                        variant={'flat'}
+                                        onPress={() => {
+                                            endGame(1);
+                                            onClose();
+                                        }}
+                                        className="w-2/5"
+                                    >
+                                        Team 1
+                                    </Button>
+                                    <Button
+                                        color={'success'}
+                                        variant={'flat'}
+                                        onPress={() => {
+                                            endGame(2);
+                                            onClose();
+                                        }}
+                                        className="w-2/5"
+                                    >
+                                        Team 2
+                                    </Button>
+                                </div>
                             </ModalBody>
-                            <ModalFooter></ModalFooter>
                         </>
                     )}
                 </ModalContent>

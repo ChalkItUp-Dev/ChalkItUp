@@ -22,30 +22,30 @@ export default function PlayerPage() {
 
     return (
         <DefaultLayout title={'Player Stats'}>
-            {player.map((player, index) => {
-                return (
-                    <div className="flex w-full justify-center " key={index}>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {player.map((player, index) => {
+                    return (
                         <Card
-                            className=" max-w-[800px] mb-4 border "
-                            fullWidth
+                            className="mb-4 border-none shadow-lg dark:bg-zinc-900"
+                            key={index}
                             radius={'sm'}
                             shadow={'none'}
                         >
                             <CardHeader className="flex gap-3">
                                 <div className={'w-full'}>
                                     <div className="flex flex-row justify-between w-full items-center">
-                                        <p className="text-md font-semibold">
+                                        <p className="text-xl font-bold">
                                             {player.username}
                                         </p>
                                         <p
                                             className={
-                                                'text-success text-xl font-semibold'
+                                                'text-success text-lg font-semibold'
                                             }
                                         >
-                                            {player.winRate}
+                                            {(player.winRate * 100).toFixed(0)}%
                                         </p>
                                     </div>
-                                    <div className="flex flex-row justify-between w-full items-center">
+                                    <div className="flex flex-row justify-between w-full items-center text-sm text-zinc-500">
                                         <p>
                                             {player.winsCount +
                                                 player.lossesCount}{' '}
@@ -73,34 +73,38 @@ export default function PlayerPage() {
 
                                 <div
                                     className={
-                                        'flex flex-row items-center mt-2'
+                                        'flex flex-row items-center mt-4'
                                     }
                                 >
-                                    <div className={'text-xs'}>Recent:</div>
+                                    <div className={'text-xs mr-2'}>
+                                        Recent:
+                                    </div>
                                     <div
                                         className={
-                                            'flex flex-row items-center center h-full'
+                                            'flex flex-row items-center center h-full gap-1.5'
                                         }
                                     >
-                                        {player.lastWins.slice(0, 15).map((game, index) => {
-                                            return (
-                                                <div
-                                                    key={game + ' ' + index}
-                                                    className={
-                                                        game
-                                                            ? ' ml-1 rounded-full bg-success w-3 h-3'
-                                                            : ' ml-1 rounded-full bg-danger w-3 h-3'
-                                                    }
-                                                ></div>
-                                            );
-                                        })}
+                                        {player.lastWins
+                                            .slice(0, 10)
+                                            .map((game, index) => {
+                                                return (
+                                                    <div
+                                                        key={game + ' ' + index}
+                                                        className={
+                                                            game
+                                                                ? 'rounded-full bg-success w-4 h-4'
+                                                                : 'rounded-full bg-danger w-4 h-4'
+                                                        }
+                                                    ></div>
+                                                );
+                                            })}
                                     </div>
                                 </div>
                             </CardBody>
                         </Card>
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
         </DefaultLayout>
     );
 }
