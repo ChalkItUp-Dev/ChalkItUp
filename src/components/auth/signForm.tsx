@@ -1,18 +1,13 @@
-import {useState} from 'react';
-import {useNavigate, Link} from 'react-router-dom';
-import {Input} from '@heroui/input';
-import {Form} from '@heroui/form';
-import {Button} from '@heroui/button';
-import {
-    EyeFilledIcon,
-    EyeSlashFilledIcon,
-} from './passwordEye.tsx';
-import {signInWithGoogle, signInWithGithub} from '../../firebase/auth.ts';
-import {FcGoogle} from 'react-icons/fc'; // Google Icon
-import {FaGithub} from 'react-icons/fa'; // GitHub Icon
-import {Divider} from '@heroui/divider';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Input } from '@heroui/input';
+import { Form } from '@heroui/form';
+import { Button } from '@heroui/button';
+import { EyeFilledIcon, EyeSlashFilledIcon } from './passwordEye.tsx';
+import { signInWithGoogle, signInWithGithub } from '../../firebase/auth.ts';
+import { Divider } from '@heroui/divider';
 import './signForm.css';
-import {UserCredential} from 'firebase/auth';
+import { UserCredential } from 'firebase/auth';
 
 interface AuthFormProps {
     buttonText: string;
@@ -22,11 +17,11 @@ interface AuthFormProps {
 }
 
 const AuthForm = ({
-                      buttonText,
-                      onSubmit,
-                      linkText,
-                      linkTo,
-                  }: AuthFormProps) => {
+    buttonText,
+    onSubmit,
+    linkText,
+    linkTo,
+}: AuthFormProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -92,9 +87,9 @@ const AuthForm = ({
                                 onClick={toggleVisibility}
                             >
                                 {isVisible ? (
-                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none"/>
+                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                                 ) : (
-                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none"/>
+                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                                 )}
                             </button>
                         }
@@ -114,16 +109,18 @@ const AuthForm = ({
                         {isSubmitting ? 'Loading...' : buttonText}
                     </Button>
                 </Form>
-                <p className={"margin"}>
+                <p className={'margin'}>
                     <Link to={linkTo} className="hover:underline">
                         {linkText}
                     </Link>
                 </p>
                 {/* 🔹 Divider mit Abstand */}
                 <div className="flex items-center my-6">
-                    <Divider className="flex-grow"/>
+                    <Divider className="flex-grow" />
                 </div>
-                <p className={"margin"}>Or sign in with your auth provider below.</p>
+                <p className={'margin'}>
+                    Or sign in with your auth provider below.
+                </p>
                 {/* 🔹 Google & GitHub Login mit Icons */}
                 <div className="flex justify-center space-x-4">
                     <button
@@ -131,17 +128,16 @@ const AuthForm = ({
                         className="transition duration-300"
                         aria-label="Sign in with Google"
                     >
-                        <FcGoogle size={28}/>
+                        <i className="fa-brands fa-google"></i>
                     </button>
                     <button
                         onClick={handleGithubSignIn}
                         className="transition duration-300"
                         aria-label="Sign in with GitHub"
                     >
-                        <FaGithub size={28}/>
+                        <i className="fa-brands fa-github"></i>
                     </button>
                 </div>
-
 
                 {error && <p>{error}</p>}
             </div>

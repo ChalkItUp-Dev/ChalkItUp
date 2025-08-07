@@ -2,7 +2,6 @@ import DefaultLayout from '../layouts/default';
 import LogoutButton from '../components/auth/logOut';
 import { Input } from '@heroui/input';
 import { Button } from '@heroui/react';
-import { FaCheck, FaPen } from 'react-icons/fa';
 import {
     checkUsername,
     fetchPlayers,
@@ -22,6 +21,8 @@ function ProfilePage() {
         email: '',
         id: '',
         lastWins: [],
+        wonBy8Ball: 0,
+        lostBy8Ball: 0,
     });
     const [disabled, setDisabled] = useState<boolean>(true);
     const [players, setPlayers] = useState<Player[]>([]);
@@ -83,7 +84,7 @@ function ProfilePage() {
                                     color={'success'}
                                     onPress={() => setDisabled(false)}
                                 >
-                                    <FaPen />
+                                    <i className="fa-solid fa-trophy"></i>
                                 </Button>
                             ) : (
                                 <Button
@@ -92,7 +93,7 @@ function ProfilePage() {
                                     color={'success'}
                                     onPress={updateUser}
                                 >
-                                    <FaCheck />
+                                    <i className="fa-solid fa-trophy"></i>
                                 </Button>
                             )
                         }

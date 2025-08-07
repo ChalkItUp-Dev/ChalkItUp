@@ -17,7 +17,6 @@ import {
     ModalHeader,
     useDisclosure,
 } from '@heroui/modal';
-import { BiPlus } from 'react-icons/bi';
 import { Select, SelectItem } from '@heroui/react';
 import GameCard from '../components/gameCard';
 
@@ -93,7 +92,7 @@ export default function HistoryPage() {
                             onOpen();
                         }}
                     >
-                        <BiPlus />
+                        <i className="fa-solid fa-plus"></i>
                     </Button>
                 </Tooltip>
             </div>

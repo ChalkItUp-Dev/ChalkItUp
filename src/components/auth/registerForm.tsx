@@ -5,8 +5,7 @@ import { Form } from '@heroui/form';
 import { Button } from '@heroui/button';
 import { EyeFilledIcon, EyeSlashFilledIcon } from './passwordEye.tsx';
 import { signInWithGoogle, signInWithGithub } from '../../firebase/auth.ts';
-import { FcGoogle } from 'react-icons/fc'; // Google Icon
-import { FaGithub } from 'react-icons/fa'; // GitHub Icon
+
 import { Divider } from '@heroui/divider';
 import './signForm.css';
 import { UserCredential } from 'firebase/auth';
@@ -151,14 +150,14 @@ const AuthFormRegister = ({
                         className="transition duration-300"
                         aria-label="Sign in with Google"
                     >
-                        <FcGoogle size={28} />
+                        <i className="fa-brands fa-google"></i>
                     </button>
                     <button
                         onClick={handleGithubSignIn}
                         className="transition duration-300"
                         aria-label="Sign in with GitHub"
                     >
-                        <FaGithub size={28} />
+                        <i className="fa-brands fa-google"></i>
                     </button>
                 </div>
 

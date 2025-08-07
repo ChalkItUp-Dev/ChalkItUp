@@ -7,6 +7,8 @@ export interface Player {
     lossesCount: number;
     winRate: number;
     lastWins: boolean[];
+    wonBy8Ball: number;
+    lostBy8Ball: number;
 }
 
 export interface Game {
@@ -20,18 +22,21 @@ export interface PlayerGame {
     userId: string;
     team: number;
     winner: boolean;
+    endState?: 'win' | 'loss_by_8_ball';
 }
 
 export interface GameHistory {
     id: string;
     players: PlayerGameDTO[];
     endTime: Date;
+    endState?: 'win' | 'loss_by_8_ball';
 }
 
 export interface PlayerGameDTO {
     player: Player;
     team: number;
     winner: boolean;
+    endState?: 'win' | 'loss_by_8_ball';
 }
 
 const API_URL = 'https://chalkitup-backend.onrender.com/api'; //' http://localhost:8080/api  ';
@@ -64,7 +69,7 @@ export const fetchPlayer = async (userId: string): Promise<Player> => {
 
 export const checkUsername = async (username: string): Promise<string> => {
     if (!username) return '';
-    const response = await fetch(
+    const response = await fetchWithSpinner(
         `${API_URL}/player/check-username/` + username
     );
     if (!response.ok) {

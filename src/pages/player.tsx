@@ -4,28 +4,64 @@ import { useEffect, useState, useMemo } from 'react';
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Progress } from '@heroui/progress';
-import { FaCrown, FaArrowTrendDown, FaFire } from 'react-icons/fa6';
+
+const StatCard = ({
+    title,
+    value,
+    icon,
+    playerName,
+}: {
+    title: string;
+    value: string;
+    icon: React.ReactNode;
+    playerName: string;
+}) => (
+    <Card className="mb-4 border-none shadow-lg dark:bg-zinc-900 text-center">
+        <CardHeader className="flex flex-col items-center justify-center">
+            {icon}
+            <p className="text-lg font-semibold">{title}</p>
+        </CardHeader>
+        <Divider />
+        <CardBody>
+            <p className="text-2xl font-bold">{playerName}</p>
+            <p className="text-md text-zinc-500">{value}</p>
+        </CardBody>
+    </Card>
+);
 
 export default function PlayerPage() {
     const [players, setPlayers] = useState<Player[]>([]);
 
     useEffect(() => {
-        fetchPlayers().then((player) => {
-            const sortedPlayers = player.sort((a, b) => b.winRate - a.winRate);
-            setPlayers(sortedPlayers);
+        fetchPlayers().then((players) => {
+            setPlayers(players);
         });
     }, []);
 
-    const calculateWinStreak = (lastWins: boolean[]): number => {
-        let streak = 0;
-        for (let i = 0; i < lastWins.length; i++) {
-            if (lastWins[i]) {
-                streak++;
-            } else {
-                break; // Streak is broken
+    const getHighestWinStreak = (players: Player[]) => {
+        let highestStreak = 0;
+        let playerWithHighestStreak: Player | null = null;
+
+        players.forEach((player) => {
+            let currentStreak = 0;
+            for (const win of player.lastWins) {
+                if (win) {
+                    currentStreak++;
+                } else {
+                    if (currentStreak > highestStreak) {
+                        highestStreak = currentStreak;
+                        playerWithHighestStreak = player;
+                    }
+                    currentStreak = 0;
+                }
             }
-        }
-        return streak;
+            if (currentStreak > highestStreak) {
+                highestStreak = currentStreak;
+                playerWithHighestStreak = player;
+            }
+        });
+
+        return { player: playerWithHighestStreak, streak: highestStreak };
     };
 
     const stats = useMemo(() => {
@@ -33,116 +69,61 @@ export default function PlayerPage() {
             return {
                 bestWinRatePlayer: null,
                 worstWinRatePlayer: null,
-                highestWinStreakPlayer: null,
-                highestWinStreak: 0,
+                highestWinStreak: { player: null, streak: 0 },
+                most8BallWinsPlayer: null,
             };
         }
 
-        const bestWinRatePlayer = players.reduce((prev, current) =>
-            prev.winRate > current.winRate ? prev : current
+        const sortedByWinRate = [...players].sort(
+            (a, b) => b.winRate - a.winRate
         );
-
-        const worstWinRatePlayer = players.reduce((prev, current) =>
-            prev.winRate < current.winRate ? prev : current
+        const bestWinRatePlayer = sortedByWinRate[0];
+        const worstWinRatePlayer = sortedByWinRate[sortedByWinRate.length - 1];
+        const highestWinStreak = getHighestWinStreak(players);
+        const sortedBy8BallWins = [...players].sort(
+            (a, b) => (b.wonBy8Ball || 0) - (a.wonBy8Ball || 0)
         );
-
-        let highestWinStreak = 0;
-        let highestWinStreakPlayer: Player | null = players[0];
-
-        players.forEach((player) => {
-            const currentStreak = calculateWinStreak(player.lastWins);
-            if (currentStreak > highestWinStreak) {
-                highestWinStreak = currentStreak;
-                highestWinStreakPlayer = player;
-            }
-        });
+        const most8BallWinsPlayer = sortedBy8BallWins[0];
 
         return {
             bestWinRatePlayer,
             worstWinRatePlayer,
-            highestWinStreakPlayer,
             highestWinStreak,
+            most8BallWinsPlayer,
         };
     }, [players]);
 
     return (
         <DefaultLayout title={'Player Stats'}>
-            {/* Summary Cards Section */}
-            <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {/* Best Win Rate Card */}
-                {stats.bestWinRatePlayer && (
-                    <Card className="border-none shadow-lg dark:bg-zinc-900">
-                        <CardHeader className="flex items-center gap-3 p-4">
-                            <FaCrown className="text-yellow-400" size={24} />
-                            <h3 className="text-lg font-semibold">
-                                Best Win Rate
-                            </h3>
-                        </CardHeader>
-                        <Divider />
-                        <CardBody className="pt-0 px-4 pb-4">
-                            <p className="text-2xl font-bold">
-                                {stats.bestWinRatePlayer.username}
-                            </p>
-                            <p className="text-success text-xl">
-                                {(
-                                    stats.bestWinRatePlayer.winRate * 100
-                                ).toFixed(0)}
-                                %
-                            </p>
-                        </CardBody>
-                    </Card>
-                )}
-                {/* Highest Win Streak Card */}
-                {stats.highestWinStreakPlayer && (
-                    <Card className="border-none shadow-lg dark:bg-zinc-900">
-                        <CardHeader className="flex items-center gap-3 p-4">
-                            <FaFire className="text-orange-500" size={24} />
-                            <h3 className="text-lg font-semibold">
-                                Longest Win Streak
-                            </h3>
-                        </CardHeader>
-                        <Divider />
-                        <CardBody className="pt-0 px-4 pb-4">
-                            <p className="text-2xl font-bold">
-                                {stats.highestWinStreakPlayer.username}
-                            </p>
-                            <p className="text-orange-500 text-xl">
-                                {stats.highestWinStreak} Win(s)
-                            </p>
-                        </CardBody>
-                    </Card>
-                )}
-                {/* Worst Win Rate Card */}
-                {stats.worstWinRatePlayer && (
-                    <Card className="border-none shadow-lg dark:bg-zinc-900">
-                        <CardHeader className="flex items-center gap-3 p-4">
-                            <FaArrowTrendDown
-                                className="text-danger"
-                                size={24}
-                            />
-                            <h3 className="text-lg font-semibold">
-                                Lowest Win Rate
-                            </h3>
-                        </CardHeader>
-                        <Divider />
-                        <CardBody className="pt-0 px-4 pb-4">
-                            <p className="text-2xl font-bold">
-                                {stats.worstWinRatePlayer.username}
-                            </p>
-                            <p className="text-danger text-xl">
-                                {(
-                                    stats.worstWinRatePlayer.winRate * 100
-                                ).toFixed(0)}
-                                %
-                            </p>
-                        </CardBody>
-                    </Card>
-                )}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+                <StatCard
+                    title="Best Win Rate"
+                    value={`${stats.bestWinRatePlayer ? (stats.bestWinRatePlayer.winRate * 100).toFixed(0) : 0}%`}
+                    icon={<i className="fa-solid fa-house"></i>}
+                    playerName={stats.bestWinRatePlayer?.username || 'N/A'}
+                />
+                <StatCard
+                    title="Highest Win Streak"
+                    value={`${stats.highestWinStreak.streak} Wins`}
+                    icon={<i className="fa-solid fa-trophy"></i>}
+                    playerName={
+                        stats.highestWinStreak.player?.username || 'N/A'
+                    }
+                />
+                <StatCard
+                    title="Most Wins by 8-Ball"
+                    value={`${stats.most8BallWinsPlayer ? stats.most8BallWinsPlayer.wonBy8Ball : 0} Wins`}
+                    icon={<i className="fa-solid fa-trophy"></i>}
+                    playerName={stats.most8BallWinsPlayer?.username || 'N/A'}
+                />
+                <StatCard
+                    title="Worst Win Rate"
+                    value={`${stats.worstWinRatePlayer ? (stats.worstWinRatePlayer.winRate * 100).toFixed(0) : 0}%`}
+                    icon={<i className="fa-solid fa-trophy"></i>}
+                    playerName={stats.worstWinRatePlayer?.username || 'N/A'}
+                />
             </div>
-
-            <Divider className="my-8" />
-
-            {/* All Players List */}
+            <Divider className="mb-8" />
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {players.map((player, index) => {
                     return (
@@ -176,6 +157,16 @@ export default function PlayerPage() {
                                         <p>
                                             {player.winsCount}W -{' '}
                                             {player.lossesCount}L
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-row justify-between w-full items-center text-sm text-zinc-500 mt-1">
+                                        <p>
+                                            8-Ball Wins:{' '}
+                                            {player.wonBy8Ball || 0}
+                                        </p>
+                                        <p>
+                                            8-Ball Losses:{' '}
+                                            {player.lostBy8Ball || 0}
                                         </p>
                                     </div>
                                 </div>
