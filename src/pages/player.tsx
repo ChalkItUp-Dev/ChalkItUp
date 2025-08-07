@@ -1,29 +1,150 @@
 import DefaultLayout from '../layouts/default';
 import { fetchPlayers, Player } from '../service/api.service';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';
 import { Progress } from '@heroui/progress';
-
-export interface PlayerStats {
-    win: number;
-    lose: number;
-    winRate: number;
-}
+import { FaCrown, FaArrowTrendDown, FaFire } from 'react-icons/fa6';
 
 export default function PlayerPage() {
-    const [player, setPlayer] = useState<Player[]>([]);
+    const [players, setPlayers] = useState<Player[]>([]);
 
     useEffect(() => {
         fetchPlayers().then((player) => {
-            setPlayer(player);
+            const sortedPlayers = player.sort((a, b) => b.winRate - a.winRate);
+            setPlayers(sortedPlayers);
         });
     }, []);
 
+    const calculateWinStreak = (lastWins: boolean[]): number => {
+        let streak = 0;
+        for (let i = 0; i < lastWins.length; i++) {
+            if (lastWins[i]) {
+                streak++;
+            } else {
+                break; // Streak is broken
+            }
+        }
+        return streak;
+    };
+
+    const stats = useMemo(() => {
+        if (players.length === 0) {
+            return {
+                bestWinRatePlayer: null,
+                worstWinRatePlayer: null,
+                highestWinStreakPlayer: null,
+                highestWinStreak: 0,
+            };
+        }
+
+        const bestWinRatePlayer = players.reduce((prev, current) =>
+            prev.winRate > current.winRate ? prev : current
+        );
+
+        const worstWinRatePlayer = players.reduce((prev, current) =>
+            prev.winRate < current.winRate ? prev : current
+        );
+
+        let highestWinStreak = 0;
+        let highestWinStreakPlayer: Player | null = players[0];
+
+        players.forEach((player) => {
+            const currentStreak = calculateWinStreak(player.lastWins);
+            if (currentStreak > highestWinStreak) {
+                highestWinStreak = currentStreak;
+                highestWinStreakPlayer = player;
+            }
+        });
+
+        return {
+            bestWinRatePlayer,
+            worstWinRatePlayer,
+            highestWinStreakPlayer,
+            highestWinStreak,
+        };
+    }, [players]);
+
     return (
         <DefaultLayout title={'Player Stats'}>
+            {/* Summary Cards Section */}
+            <div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {/* Best Win Rate Card */}
+                {stats.bestWinRatePlayer && (
+                    <Card className="border-none shadow-lg dark:bg-zinc-900">
+                        <CardHeader className="flex items-center gap-3 p-4">
+                            <FaCrown className="text-yellow-400" size={24} />
+                            <h3 className="text-lg font-semibold">
+                                Best Win Rate
+                            </h3>
+                        </CardHeader>
+                        <Divider />
+                        <CardBody className="pt-0 px-4 pb-4">
+                            <p className="text-2xl font-bold">
+                                {stats.bestWinRatePlayer.username}
+                            </p>
+                            <p className="text-success text-xl">
+                                {(
+                                    stats.bestWinRatePlayer.winRate * 100
+                                ).toFixed(0)}
+                                %
+                            </p>
+                        </CardBody>
+                    </Card>
+                )}
+                {/* Highest Win Streak Card */}
+                {stats.highestWinStreakPlayer && (
+                    <Card className="border-none shadow-lg dark:bg-zinc-900">
+                        <CardHeader className="flex items-center gap-3 p-4">
+                            <FaFire className="text-orange-500" size={24} />
+                            <h3 className="text-lg font-semibold">
+                                Longest Win Streak
+                            </h3>
+                        </CardHeader>
+                        <Divider />
+                        <CardBody className="pt-0 px-4 pb-4">
+                            <p className="text-2xl font-bold">
+                                {stats.highestWinStreakPlayer.username}
+                            </p>
+                            <p className="text-orange-500 text-xl">
+                                {stats.highestWinStreak} Win(s)
+                            </p>
+                        </CardBody>
+                    </Card>
+                )}
+                {/* Worst Win Rate Card */}
+                {stats.worstWinRatePlayer && (
+                    <Card className="border-none shadow-lg dark:bg-zinc-900">
+                        <CardHeader className="flex items-center gap-3 p-4">
+                            <FaArrowTrendDown
+                                className="text-danger"
+                                size={24}
+                            />
+                            <h3 className="text-lg font-semibold">
+                                Lowest Win Rate
+                            </h3>
+                        </CardHeader>
+                        <Divider />
+                        <CardBody className="pt-0 px-4 pb-4">
+                            <p className="text-2xl font-bold">
+                                {stats.worstWinRatePlayer.username}
+                            </p>
+                            <p className="text-danger text-xl">
+                                {(
+                                    stats.worstWinRatePlayer.winRate * 100
+                                ).toFixed(0)}
+                                %
+                            </p>
+                        </CardBody>
+                    </Card>
+                )}
+            </div>
+
+            <Divider className="my-8" />
+
+            {/* All Players List */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {player.map((player, index) => {
+                {players.map((player, index) => {
                     return (
                         <Card
                             className="mb-4 border-none shadow-lg dark:bg-zinc-900"
@@ -43,6 +164,7 @@ export default function PlayerPage() {
                                             }
                                         >
                                             {(player.winRate * 100).toFixed(0)}%
+                                            Win Rate
                                         </p>
                                     </div>
                                     <div className="flex flex-row justify-between w-full items-center text-sm text-zinc-500">
