@@ -19,8 +19,6 @@ import {
 } from '@heroui/modal';
 import { Select, SelectItem } from '@heroui/react';
 import GameCard from '../components/gameCard';
-import Navbar from '../components/navbar';
-import { Footer } from '../components/footer';
 
 export default function HistoryPage() {
     const [player, setPlayer] = useState<Player[]>([]);
@@ -78,125 +76,91 @@ export default function HistoryPage() {
     };
 
     return (
-        <>
-            <div className="flex flex-col max-w-[1024px] mx-auto">
-                <div className="bg-background w-full z-50 sm:hidden md:block flex flex-row items-center justify-between ">
-                    <p
-                        className={
-                            'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full '
-                        }
+        <DefaultLayout title={'Game history'}>
+            {games.map((stat, index) => {
+                return (
+                    <div
+                        className="flex w-full justify-center"
+                        key={index + ' Card'}
                     >
-                        Game History
-                    </p>
-
-                    <Button>New Game</Button>
-                </div>
-
-                <div className="md:hidden">
-                    <p
-                        className={
-                            'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full md'
-                        }
+                        <GameCard game={stat} key={index + ' GameCard'} />
+                    </div>
+                );
+            })}
+            <div className="fixed bottom-24 right-4 sm:hidden">
+                <Tooltip content="Create new Game">
+                    <Button
+                        className="rounded-full shadow-xl bg-green-500 font-bold text-xl "
+                        isIconOnly
+                        onPress={() => {
+                            onOpen();
+                        }}
                     >
-                        Test
-                    </p>
-                </div>
+                        <i className="fa-solid fa-plus"></i>
+                    </Button>
+                </Tooltip>
             </div>
-            <main className="flex-grow container mx-auto max-w-7xl px-6 mt-[100px] pb-12">
-                {games.map((stat, index) => {
-                    return (
-                        <div
-                            className="flex w-full justify-center"
-                            key={index + ' Card'}
-                        >
-                            <GameCard game={stat} key={index + ' GameCard'} />
-                        </div>
-                    );
-                })}
-                <div className="fixed bottom-24 right-4 sm:hidden">
-                    <Tooltip content="Create new Game">
-                        <Button
-                            className="rounded-full shadow-xl bg-green-500 font-bold text-xl "
-                            isIconOnly
-                            onPress={() => {
-                                onOpen();
-                            }}
-                        >
-                            <i className="fa-solid fa-plus"></i>
-                        </Button>
-                    </Tooltip>
-                </div>
 
-                <Modal
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    radius={'sm'}
-                >
-                    <ModalContent>
-                        {(onClose) => (
-                            <>
-                                <ModalHeader className="flex flex-col gap-1">
-                                    Start new game
-                                </ModalHeader>
-                                <ModalBody className="h-60">
-                                    <Form>
-                                        <Select
-                                            className="mb-6"
-                                            label="Select Players for Team 1"
-                                            selectionMode="multiple"
-                                            isRequired
-                                            onChange={
-                                                handleSelectionChangeForTeam1
-                                            }
-                                        >
-                                            {player.map((p) => (
-                                                <SelectItem key={p.userId}>
-                                                    {p.username}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
-                                        <Select
-                                            className="mb-6"
-                                            label="Select Players for Team 2"
-                                            selectionMode="multiple"
-                                            isRequired
-                                            onChange={
-                                                handleSelectionChangeForTeam2
-                                            }
-                                        >
-                                            {player.map((p) => (
-                                                <SelectItem key={p.userId}>
-                                                    {p.username}
-                                                </SelectItem>
-                                            ))}
-                                        </Select>
-                                    </Form>
-                                    <div>
-                                        <Button
-                                            color={'success'}
-                                            variant={'flat'}
-                                            fullWidth
-                                            disabled={
-                                                team1.length === 0 ||
-                                                team2.length === 0
-                                            }
-                                            type={'submit'}
-                                            onPress={() => {
-                                                startNewGame();
-                                                onClose();
-                                            }}
-                                        >
-                                            Start Game
-                                        </Button>
-                                    </div>
-                                </ModalBody>
-                                <ModalFooter></ModalFooter>
-                            </>
-                        )}
-                    </ModalContent>
-                </Modal>
-            </main>
-            <Footer />
-        </>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} radius={'sm'}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                Start new game
+                            </ModalHeader>
+                            <ModalBody className="h-60">
+                                <Form>
+                                    <Select
+                                        className="mb-6"
+                                        label="Select Players for Team 1"
+                                        selectionMode="multiple"
+                                        isRequired
+                                        onChange={handleSelectionChangeForTeam1}
+                                    >
+                                        {player.map((p) => (
+                                            <SelectItem key={p.userId}>
+                                                {p.username}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Select
+                                        className="mb-6"
+                                        label="Select Players for Team 2"
+                                        selectionMode="multiple"
+                                        isRequired
+                                        onChange={handleSelectionChangeForTeam2}
+                                    >
+                                        {player.map((p) => (
+                                            <SelectItem key={p.userId}>
+                                                {p.username}
+                                            </SelectItem>
+                                        ))}
+                                    </Select>
+                                </Form>
+                                <div>
+                                    <Button
+                                        color={'success'}
+                                        variant={'flat'}
+                                        fullWidth
+                                        disabled={
+                                            team1.length === 0 ||
+                                            team2.length === 0
+                                        }
+                                        type={'submit'}
+                                        onPress={() => {
+                                            startNewGame();
+                                            onClose();
+                                        }}
+                                    >
+                                        Start Game
+                                    </Button>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter></ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        </DefaultLayout>
     );
 }
