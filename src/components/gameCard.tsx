@@ -77,7 +77,7 @@ function GameCard(props: { game: GameHistory }) {
                                 .map((p) => (
                                     <p
                                         key={p.player.userId}
-                                        className="font-semibold text-lg"
+                                        className="font-semibold text-lg mt-2"
                                     >
                                         {p.player.username}
                                     </p>
@@ -104,7 +104,7 @@ function GameCard(props: { game: GameHistory }) {
                                 .map((p) => (
                                     <p
                                         key={p.player.userId}
-                                        className="font-semibold text-lg"
+                                        className="font-semibold text-lg mt-2"
                                     >
                                         {p.player.username}
                                     </p>
