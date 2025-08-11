@@ -26,13 +26,8 @@ export default function HistoryPage() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     useEffect(() => {
-        fetchPlayers().then((player) => {
-            setPlayer(player);
-        });
-        fetchGames().then((game) => {
-            setGames(game);
-        });
-    }, [onOpen]);
+        fetch();
+    }, []);
 
     const [team1, setTeam1] = useState<string[]>([]);
     const [team2, setTeam2] = useState<string[]>([]);
@@ -41,6 +36,15 @@ export default function HistoryPage() {
         e: ChangeEvent<HTMLSelectElement>
     ) => {
         setTeam1(e.target.value.split(','));
+    };
+
+    const fetch = () => {
+        fetchPlayers().then((player) => {
+            setPlayer(player);
+        });
+        fetchGames().then((game) => {
+            setGames(game);
+        });
     };
 
     const handleSelectionChangeForTeam2 = (
@@ -68,7 +72,7 @@ export default function HistoryPage() {
                 winner: false,
             });
         });
-        saveGame(players).then(() => console.log('Created success'));
+        saveGame(players).then(() => fetch());
     };
 
     return (

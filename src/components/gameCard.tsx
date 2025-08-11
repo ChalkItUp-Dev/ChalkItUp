@@ -30,7 +30,6 @@ function GameCard(props: { game: GameHistory }) {
         });
 
         updateGame(updatedGame).then(() => {
-            console.log('Game ended successfully' + updatedGame);
             onOpenChange();
         });
     };
