@@ -87,7 +87,7 @@ export default function HistoryPage() {
                     </div>
                 );
             })}
-            <div className="fixed bottom-24 right-4 sm:hidden">
+            <div className="fixed bottom-24 right-4">
                 <Tooltip content="Create new Game">
                     <Button
                         className="rounded-full shadow-xl bg-green-500 font-bold text-xl "
