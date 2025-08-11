@@ -81,7 +81,7 @@ export default function PlayerPage() {
         const worstWinRatePlayer = sortedByWinRate[sortedByWinRate.length - 1];
         const highestWinStreak = getHighestWinStreak(players);
         const sortedBy8BallWins = [...players].sort(
-            (a, b) => (b.wonBy8Ball || 0) - (a.wonBy8Ball || 0)
+            (a, b) => (b.lostBy8Ball || 0) - (a.lostBy8Ball || 0)
         );
         const most8BallWinsPlayer = sortedBy8BallWins[0];
 
@@ -99,27 +99,31 @@ export default function PlayerPage() {
                 <StatCard
                     title="Best Win Rate"
                     value={`${stats.bestWinRatePlayer ? (stats.bestWinRatePlayer.winRate * 100).toFixed(0) : 0}%`}
-                    icon={<i className="fa-solid fa-house"></i>}
+                    icon={
+                        <i className="fa-solid fa-arrow-trend-up text-success"></i>
+                    }
                     playerName={stats.bestWinRatePlayer?.username || 'N/A'}
                 />
                 <StatCard
                     title="Highest Win Streak"
                     value={`${stats.highestWinStreak.streak} Wins`}
-                    icon={<i className="fa-solid fa-trophy"></i>}
+                    icon={<i className="fa-solid fa-trophy text-amber-500"></i>}
                     playerName={
                         stats.highestWinStreak.player?.username || 'N/A'
                     }
                 />
                 <StatCard
-                    title="Most Wins by 8-Ball"
-                    value={`${stats.most8BallWinsPlayer ? stats.most8BallWinsPlayer.wonBy8Ball : 0} Wins`}
-                    icon={<i className="fa-solid fa-trophy"></i>}
+                    title="Pulled Porker Nr. 1"
+                    value={`${stats.most8BallWinsPlayer ? stats.most8BallWinsPlayer.lostBy8Ball : 0} Losses`}
+                    icon={<i className="fa-solid fa-bacon text-pink-400"></i>}
                     playerName={stats.most8BallWinsPlayer?.username || 'N/A'}
                 />
                 <StatCard
                     title="Worst Win Rate"
                     value={`${stats.worstWinRatePlayer ? (stats.worstWinRatePlayer.winRate * 100).toFixed(0) : 0}%`}
-                    icon={<i className="fa-solid fa-trophy"></i>}
+                    icon={
+                        <i className="fa-solid fa-arrow-trend-down text-danger"></i>
+                    }
                     playerName={stats.worstWinRatePlayer?.username || 'N/A'}
                 />
             </div>

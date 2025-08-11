@@ -54,7 +54,7 @@ function GameCard(props: { game: GameHistory }) {
                                 onPress={onOpen}
                                 className="bg-transparent"
                             >
-                                <i className="fa-solid fa-trophy"></i>
+                                <i className="fa-solid fa-trophy text-success"></i>
                             </Button>
                         </Tooltip>
                     )}
@@ -65,11 +65,13 @@ function GameCard(props: { game: GameHistory }) {
                         {/* Team 1 */}
                         <div className="w-2/5 flex flex-col items-center text-center">
                             {props.game.players.find((x) => x.winner)?.team ===
-                                1 && <i className="fa-solid fa-trophy"></i>}
+                                1 && (
+                                <i className="fa-solid fa-trophy text-success"></i>
+                            )}
                             {props.game.players.find((x) => x.winner)?.team !==
                                 1 &&
                                 props.game.endTime && (
-                                    <i className="fa-solid fa-x"></i>
+                                    <i className="fa-solid fa-x text-danger"></i>
                                 )}
                             {props.game.players
                                 .filter((p) => p.team === 1)
@@ -90,11 +92,13 @@ function GameCard(props: { game: GameHistory }) {
                         {/* Team 2 */}
                         <div className="w-2/5 flex flex-col items-center text-center">
                             {props.game.players.find((x) => x.winner)?.team ===
-                                2 && <i className="fa-solid fa-trophy"></i>}
+                                2 && (
+                                <i className="fa-solid fa-trophy text-success"></i>
+                            )}
                             {props.game.players.find((x) => x.winner)?.team !==
                                 2 &&
                                 props.game.endTime && (
-                                    <i className="fa-solid fa-x"></i>
+                                    <i className="fa-solid fa-x text-danger"></i>
                                 )}
                             {props.game.players
                                 .filter((p) => p.team === 2)

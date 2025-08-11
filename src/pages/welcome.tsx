@@ -1,5 +1,6 @@
 import DefaultLayout from '../layouts/default';
 import { Link } from '@heroui/link';
+import '../styles/welcome.css';
 
 function WelcomePage() {
     return (
@@ -9,9 +10,9 @@ function WelcomePage() {
                     <div className="grid grid-cols-1 gap-8 max-w-4xl mb-8">
                         <div className="flex flex-col items-center">
                             <Link href="/" className="flex flex-col">
-                                <i className="fa-solid fa-trophy"></i>
+                                <i className="fa-solid fa-hand-spock text-fuchsia-500 welcome"></i>
 
-                                <h2 className="text-xl font-semibold mb-1 text-black">
+                                <h2 className="text-xl font-semibold mb-1 mt-6 text-black">
                                     Welcome
                                 </h2>
                             </Link>
@@ -22,9 +23,9 @@ function WelcomePage() {
                         </div>
                         <div className="flex flex-col items-center">
                             <Link href="/games" className="flex flex-col">
-                                <i className="fa-solid fa-trophy"></i>
+                                <i className="fa-solid fa-chart-column text-success welcome"></i>
 
-                                <h2 className="text-xl font-semibold mb-1 text-black">
+                                <h2 className="text-xl font-semibold mb-1 mt-6 text-black">
                                     Track Games
                                 </h2>
                             </Link>
@@ -32,9 +33,9 @@ function WelcomePage() {
                         </div>
                         <div className="flex flex-col items-center">
                             <Link href="/players" className="flex flex-col">
-                                <i className="fa-solid fa-trophy"></i>
+                                <i className="fa-solid fa-trophy text-amber-500 welcome"></i>
 
-                                <h2 className="text-xl font-semibold mb-1 text-black">
+                                <h2 className="text-xl font-semibold mb-1 mt-6 text-black">
                                     View Statistics
                                 </h2>
                             </Link>
@@ -45,9 +46,9 @@ function WelcomePage() {
                         </div>
                         <div className="flex flex-col items-center">
                             <Link href="/players" className="flex flex-col">
-                                <i className="fa-solid fa-trophy"></i>
+                                <i className="fa-solid fa-users welcome"></i>
 
-                                <h2 className="text-xl font-semibold mb-1 text-black">
+                                <h2 className="text-xl font-semibold mb-1 mt-6 text-black">
                                     Compete with Friends
                                 </h2>
                             </Link>
