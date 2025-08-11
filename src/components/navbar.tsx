@@ -20,7 +20,7 @@ function Navbar(prop: { title: string }) {
             <div className="bg-background w-full z-50">
                 <p
                     className={
-                        'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full'
+                        'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full md'
                     }
                 >
                     {prop.title}

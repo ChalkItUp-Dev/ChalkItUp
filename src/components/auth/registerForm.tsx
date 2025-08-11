@@ -5,11 +5,10 @@ import { Form } from '@heroui/form';
 import { Button } from '@heroui/button';
 import { EyeFilledIcon, EyeSlashFilledIcon } from './passwordEye.tsx';
 import { signInWithGoogle, signInWithGithub } from '../../firebase/auth.ts';
-
 import { Divider } from '@heroui/divider';
 import './signForm.css';
 import { UserCredential } from 'firebase/auth';
-import { savePlayer } from '../../service/api.service';
+import { savePlayer, fetchPlayer } from '../../service/api.service'; // fetchPlayer importieren
 
 interface AuthFormProps {
     buttonText: string;
@@ -41,10 +40,7 @@ const AuthFormRegister = ({
         setIsSubmitting(true);
         try {
             const user = await onSubmit(email, password);
-            savePlayer(user.user.uid, username, email).then(() => {
-                console.log(user);
-            });
-            //TODO create player when register
+            await savePlayer(user.user.uid, username, email);
             navigate('/');
         } catch (err: any) {
             setError(err.message);
@@ -55,9 +51,17 @@ const AuthFormRegister = ({
     const handleGoogleSignIn = async () => {
         try {
             const user = await signInWithGoogle();
-            savePlayer(user.uid, email, email).then(() => {
-                console.log(user);
-            });
+            try {
+                // Prüfen, ob der Spieler bereits existiert
+                await fetchPlayer(user.uid);
+            } catch (e) {
+                // Wenn nicht, neuen Spieler erstellen
+                await savePlayer(
+                    user.uid,
+                    user.displayName || user.email!,
+                    user.email!
+                );
+            }
             navigate('/');
         } catch (err: any) {
             setError(err.message);
@@ -67,9 +71,17 @@ const AuthFormRegister = ({
     const handleGithubSignIn = async () => {
         try {
             const user = await signInWithGithub();
-            savePlayer(user.uid, email, email).then(() => {
-                console.log(user);
-            });
+            try {
+                // Prüfen, ob der Spieler bereits existiert
+                await fetchPlayer(user.uid);
+            } catch (e) {
+                // Wenn nicht, neuen Spieler erstellen
+                await savePlayer(
+                    user.uid,
+                    user.displayName || user.email!,
+                    user.email!
+                );
+            }
             navigate('/');
         } catch (err: any) {
             setError(err.message);
@@ -157,7 +169,7 @@ const AuthFormRegister = ({
                         className="transition duration-300"
                         aria-label="Sign in with GitHub"
                     >
-                        <i className="fa-brands fa-google"></i>
+                        <i className="fa-brands fa-github"></i>
                     </button>
                 </div>
 

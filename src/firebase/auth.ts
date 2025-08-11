@@ -1,19 +1,32 @@
-import {auth} from "./firebase.ts";
-import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from './firebase.ts';
+import {
+    GoogleAuthProvider,
+    GithubAuthProvider,
+    signInWithPopup,
+} from 'firebase/auth';
 
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from 'firebase/auth';
 
-export const doCreateUserWithEmailAndPassword = async (email: string, password: string) => {
+export const doCreateUserWithEmailAndPassword = async (
+    email: string,
+    password: string
+) => {
     return createUserWithEmailAndPassword(auth, email, password);
-}
+};
 
-export const doSignInWithEmailAndPassword = (email: string, password: string) => {
+export const doSignInWithEmailAndPassword = (
+    email: string,
+    password: string
+) => {
     return signInWithEmailAndPassword(auth, email, password);
-}
+};
 
 export const doSignOut = () => {
     return auth.signOut();
-}
+};
 
 // Google Login
 export const signInWithGoogle = async () => {
@@ -22,7 +35,7 @@ export const signInWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
         return result.user;
     } catch (error) {
-        console.error("Google Login Error:", error);
+        console.error('Google Login Error:', error);
         throw error;
     }
 };
@@ -34,7 +47,7 @@ export const signInWithGithub = async () => {
         const result = await signInWithPopup(auth, provider);
         return result.user;
     } catch (error) {
-        console.error("GitHub Login Error:", error);
+        console.error('GitHub Login Error:', error);
         throw error;
     }
 };
