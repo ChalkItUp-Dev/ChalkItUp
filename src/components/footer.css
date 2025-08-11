@@ -9,10 +9,12 @@
     padding: 0 24px;
 }
 
-
 @media (max-width: 768px) {
-
     .footere {
         width: 90%;
     }
+}
+
+.footer-icon {
+    scale: 2;
 }

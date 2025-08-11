@@ -15,3 +15,7 @@ body,
 .dark .bg-background {
     background-color: #18181b; /* Dark Gray for dark mode */
 }
+
+.fa-solid {
+    scale: 1.5;
+}
