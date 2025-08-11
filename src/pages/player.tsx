@@ -76,9 +76,9 @@ export default function PlayerPage() {
             };
         }
 
-        const sortedByWinRate = [...players].sort(
-            (a, b) => b.winRate - a.winRate
-        );
+        const sortedByWinRate = [...players]
+            .filter((x) => x.winsCount + x.lossesCount !== 0)
+            .sort((a, b) => b.winRate - a.winRate);
         const bestWinRatePlayer = sortedByWinRate[0];
         const worstWinRatePlayer = sortedByWinRate[sortedByWinRate.length - 1];
         const highestWinStreak = getHighestWinStreak(players);
