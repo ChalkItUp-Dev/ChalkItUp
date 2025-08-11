@@ -8,7 +8,7 @@ body {
 
 body,
 .bg-background {
-    background-color: #f4f4f5; /* Light Gray for light mode */
+    background-color: #fff; /* Light Gray for light mode */
 }
 
 .dark body,

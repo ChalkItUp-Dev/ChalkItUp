@@ -16,9 +16,9 @@ export function Footer() {
     const [activeLink, setActiveLink] = useState(router.pathname as FooterLink);
 
     return (
-        <div className="bg-background z-50 pt-2 fixed bottom-0 max-w-[1024px] w-full mx-auto">
+        <div className="z-50 pt-2 fixed bottom-0 max-w-[1024px] w-full mx-auto">
             <footer className="">
-                <div className="flex flex-row items-center p-4 justify-center space-x-8 bg-background">
+                <div className="flex flex-row items-center p-4 justify-center space-x-8 bg-gray-100 dark:bg-gray-800">
                     <Link
                         href="/games"
                         onClick={() => setActiveLink(FooterLink.Games)}

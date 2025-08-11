@@ -17,10 +17,10 @@ function Navbar(prop: { title: string }) {
 
     return (
         <>
-            <div className="bg-background w-full z-50">
+            <div className="bg-gray-300 w-full z-50">
                 <p
                     className={
-                        'text-4xl font-bold ml-6 pt-4 mb-2 fixed z-50 h-16 bg-background w-full md'
+                        'text-4xl font-bold pl-6 pt-4 pb-2 fixed z-50 h-16 bg-gray-100 dark:bg-gray-800 w-full md'
                     }
                 >
                     {prop.title}
