@@ -44,6 +44,7 @@ export default function PlayerPage() {
 
         players.forEach((player) => {
             let currentStreak = 0;
+            console.log(player);
             for (const win of player.lastWins) {
                 if (win) {
                     currentStreak++;
@@ -53,6 +54,7 @@ export default function PlayerPage() {
                         playerWithHighestStreak = player;
                     }
                     currentStreak = 0;
+                    break;
                 }
             }
             if (currentStreak > highestStreak) {
