@@ -40,6 +40,7 @@ const playerFromDoc = (doc: QueryDocumentSnapshot<DocumentData>): Player => {
         lastWins: [], // Wird später berechnet
         wonBy8Ball: 0, // Wird später berechnet
         lostBy8Ball: 0, // Wird später berechnet
+        lostBy8BallPercent: 0, // Wird später berechnet
     };
 };
 
@@ -139,6 +140,7 @@ export const fetchPlayersWithStats = async (): Promise<Player[]> => {
             lastWins: boolean[];
             wonBy8Ball: number;
             lostBy8Ball: number;
+            lostBy8BallPercent: number;
         };
     } = {};
 
@@ -149,6 +151,7 @@ export const fetchPlayersWithStats = async (): Promise<Player[]> => {
             lastWins: [],
             wonBy8Ball: 0,
             lostBy8Ball: 0,
+            lostBy8BallPercent: 0,
         };
     });
 
@@ -188,6 +191,7 @@ export const fetchPlayersWithStats = async (): Promise<Player[]> => {
                 lastWins: stats.lastWins,
                 wonBy8Ball: stats.wonBy8Ball,
                 lostBy8Ball: stats.lostBy8Ball,
+                lostBy8BallPercent: stats.lostBy8Ball / stats.losses,
             };
         })
         .sort((a, b) => b.winRate - a.winRate);

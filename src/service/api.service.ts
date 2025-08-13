@@ -9,6 +9,7 @@ export interface Player {
     lastWins: boolean[];
     wonBy8Ball: number;
     lostBy8Ball: number;
+    lostBy8BallPercent: number;
 }
 
 export interface Game {

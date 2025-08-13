@@ -100,7 +100,7 @@ export default function PlayerPage() {
                 bestWinRatePlayer: null,
                 worstWinRatePlayer: null,
                 highestWinStreak: { player: null, streak: 0 },
-                most8BallWinsPlayer: null,
+                mostlostBy8Ball: null,
             };
         }
 
@@ -113,13 +113,20 @@ export default function PlayerPage() {
         const sortedBy8BallWins = [...players].sort(
             (a, b) => (b.lostBy8Ball || 0) - (a.lostBy8Ball || 0)
         );
-        const most8BallWinsPlayer = sortedBy8BallWins[0];
+        const mostlostBy8Ball = sortedBy8BallWins[0];
+
+        const sortedBy8BallPercent = [...players].sort(
+            (a, b) => (b.lostBy8BallPercent || 0) - (a.lostBy8BallPercent || 0)
+        );
+
+        const lostBy8BallPercent = sortedBy8BallPercent[0];
 
         return {
             bestWinRatePlayer,
             worstWinRatePlayer,
             highestWinStreak,
-            most8BallWinsPlayer,
+            mostlostBy8Ball,
+            lostBy8BallPercent,
         };
     }, [players]);
 
@@ -144,9 +151,15 @@ export default function PlayerPage() {
                 />
                 <StatCard
                     title="Pulled Porker Nr. 1"
-                    value={`${stats.most8BallWinsPlayer ? stats.most8BallWinsPlayer.lostBy8Ball : 0} Losses by 8-Ball`}
+                    value={`${stats.mostlostBy8Ball ? stats.mostlostBy8Ball.lostBy8Ball : 0} Losses by 8-Ball`}
                     icon={<i className="fa-solid fa-bacon text-pink-400"></i>}
-                    playerName={stats.most8BallWinsPlayer?.username || 'N/A'}
+                    playerName={stats.mostlostBy8Ball?.username || 'N/A'}
+                />
+                <StatCard
+                    title="Pulled Porker Nr. 1 Relative"
+                    value={`${stats.lostBy8BallPercent ? stats.lostBy8BallPercent : 0} Losses by 8-Ball`}
+                    icon={<i className="fa-solid fa-bacon text-pink-400"></i>}
+                    playerName={stats.lostBy8BallPercent?.username || 'N/A'}
                 />
                 <StatCard
                     title="Worst Win Rate"
