@@ -157,7 +157,7 @@ export default function PlayerPage() {
                 />
                 <StatCard
                     title="Pulled Porker Nr. 1 Relative"
-                    value={`${stats.lostBy8BallPercent ? stats.lostBy8BallPercent : 0} Losses by 8-Ball`}
+                    value={`${stats.lostBy8BallPercent ? stats.lostBy8BallPercent.lostBy8BallPercent : 0} Losses by 8-Ball`}
                     icon={<i className="fa-solid fa-bacon text-pink-400"></i>}
                     playerName={stats.lostBy8BallPercent?.username || 'N/A'}
                 />
