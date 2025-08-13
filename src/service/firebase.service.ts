@@ -90,8 +90,11 @@ export const checkUsername = async (username: string): Promise<boolean> => {
 // --- Game-Funktionen ---
 
 export const saveGame = async (players: PlayerGame[]): Promise<void> => {
+    const playerIds = players.map((p) => p.userId);
+
     await addDoc(gamesCollection, {
-        players,
+        players: players,
+        playerIds: playerIds, // Das neue Feld mit den Spieler-UIDs
         endTime: null,
         createdAt: serverTimestamp(),
     });
