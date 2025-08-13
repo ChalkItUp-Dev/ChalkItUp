@@ -64,6 +64,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -76,3 +79,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHALKITUP_95340 }}
           projectId: chalkitup-95340
+          entryPoint: '.'
