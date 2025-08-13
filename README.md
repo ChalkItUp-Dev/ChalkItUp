@@ -1,6 +1,5 @@
 # General infromation
-Try [ChalkItUp.](https://chalkitup.onrender.com) <br/>
-[Backend-Repo.](https://github.com/JFidan/chalkItUp-Backend/blob/main/README.md)
+Try [ChalkItUp.](https://chalkitup.de)
 
 
 ***
