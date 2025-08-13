@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: build/
+          path: dist/
 
   # Job 2: TEST
   test:
@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: build/
+          path: dist/
 
       - name: Deploy to Firebase Live Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
