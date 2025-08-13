@@ -58,8 +58,11 @@ jobs:
   # Job 3: DEPLOY ON PROD
   live_deploy:
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: [ build, test ]
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
