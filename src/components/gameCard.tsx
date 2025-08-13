@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Divider } from '@heroui/divider';
-import { GameHistory, updateGame } from '../service/api.service';
+import { GameHistory } from '../service/api.service';
+import { updateGame } from '../service/firebase.service';
 import {
     Modal,
     ModalBody,

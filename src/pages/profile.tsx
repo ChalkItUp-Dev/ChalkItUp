@@ -4,12 +4,13 @@ import { Input } from '@heroui/input';
 import { Button } from '@heroui/react';
 import {
     checkUsername,
-    fetchPlayers,
-    Player,
+    fetchPlayersWithStats, // Geändert
     updatePlayer,
-} from '../service/api.service';
+    fetchPlayerByUserId, // Hinzugefügt
+} from '../service/firebase.service';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/authContext';
+import { Player } from '../service/api.service';
 
 function ProfilePage() {
     const [user, setUser] = useState<Player>({
@@ -39,10 +40,8 @@ function ProfilePage() {
 
     useEffect(() => {
         if (currentUser)
-            fetchPlayers().then((player) => {
-                setPlayers(player);
-                const tmp = player.find((x) => x.userId === currentUser.uid);
-                if (tmp) setUser(tmp);
+            fetchPlayerByUserId(currentUser.uid).then((player) => {
+                if (player) setUser(player);
             });
     }, []);
 
@@ -84,7 +83,7 @@ function ProfilePage() {
                                     color={'success'}
                                     onPress={() => setDisabled(false)}
                                 >
-                                    <i className="fa-solid fa-trophy"></i>
+                                    <i className="fa-solid fa-pen"></i>
                                 </Button>
                             ) : (
                                 <Button
@@ -93,7 +92,7 @@ function ProfilePage() {
                                     color={'success'}
                                     onPress={updateUser}
                                 >
-                                    <i className="fa-solid fa-trophy"></i>
+                                    <i className="fa-solid fa-check"></i>
                                 </Button>
                             )
                         }

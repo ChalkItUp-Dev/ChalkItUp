@@ -1,5 +1,6 @@
 import DefaultLayout from '../layouts/default';
-import { fetchPlayers, Player } from '../service/api.service';
+import { Player } from '../service/api.service';
+import { fetchPlayersWithStats } from '../service/firebase.service';
 import { useEffect, useState, useMemo } from 'react';
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Divider } from '@heroui/divider';
@@ -33,7 +34,7 @@ export default function PlayerPage() {
     const [players, setPlayers] = useState<Player[]>([]);
 
     useEffect(() => {
-        fetchPlayers().then((players) => {
+        fetchPlayersWithStats().then((players) => {
             setPlayers(players);
         });
     }, []);
@@ -66,6 +67,33 @@ export default function PlayerPage() {
         return { player: playerWithHighestStreak, streak: highestStreak };
     };
 
+    const getHighestWinStreakAllTime = (players: Player[]) => {
+        let highestStreak = 0;
+        let playerWithHighestStreak: Player | null = null;
+
+        players.forEach((player) => {
+            let currentStreak = 0;
+            console.log(player);
+            for (const win of player.lastWins) {
+                if (win) {
+                    currentStreak++;
+                } else {
+                    if (currentStreak > highestStreak) {
+                        highestStreak = currentStreak;
+                        playerWithHighestStreak = player;
+                    }
+                    currentStreak = 0;
+                }
+            }
+            if (currentStreak > highestStreak) {
+                highestStreak = currentStreak;
+                playerWithHighestStreak = player;
+            }
+        });
+
+        return { player: playerWithHighestStreak, streak: highestStreak };
+    };
+
     const stats = useMemo(() => {
         if (players.length === 0) {
             return {
@@ -78,7 +106,7 @@ export default function PlayerPage() {
 
         const sortedByWinRate = [...players]
             .filter((x) => x.winsCount + x.lossesCount !== 0)
-            .sort((a, b) => b.winRate - a.winRate);
+            .sort((a, b) => b.winRate - a.winRate || b.winsCount - a.winsCount);
         const bestWinRatePlayer = sortedByWinRate[0];
         const worstWinRatePlayer = sortedByWinRate[sortedByWinRate.length - 1];
         const highestWinStreak = getHighestWinStreak(players);

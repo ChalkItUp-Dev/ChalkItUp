@@ -8,7 +8,10 @@ import { signInWithGoogle, signInWithGithub } from '../../firebase/auth.ts';
 import { Divider } from '@heroui/divider';
 import './signForm.css';
 import { UserCredential } from 'firebase/auth';
-import { savePlayer, fetchPlayer } from '../../service/api.service'; // fetchPlayer importieren
+import {
+    fetchPlayerByUserId,
+    savePlayer,
+} from '../../service/firebase.service.ts';
 
 interface AuthFormProps {
     buttonText: string;
@@ -53,7 +56,7 @@ const AuthFormRegister = ({
             const user = await signInWithGoogle();
             try {
                 // Prüfen, ob der Spieler bereits existiert
-                await fetchPlayer(user.uid);
+                await fetchPlayerByUserId(user.uid);
             } catch (e) {
                 // Wenn nicht, neuen Spieler erstellen
                 await savePlayer(
@@ -73,7 +76,7 @@ const AuthFormRegister = ({
             const user = await signInWithGithub();
             try {
                 // Prüfen, ob der Spieler bereits existiert
-                await fetchPlayer(user.uid);
+                await fetchPlayerByUserId(user.uid);
             } catch (e) {
                 // Wenn nicht, neuen Spieler erstellen
                 await savePlayer(

@@ -1,12 +1,5 @@
 import DefaultLayout from '../layouts/default';
-import {
-    fetchGames,
-    fetchPlayers,
-    GameHistory,
-    Player,
-    PlayerGame,
-    saveGame,
-} from '../service/api.service';
+import { GameHistory, Player, PlayerGame } from '../service/api.service';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Form, Tooltip } from '@heroui/react';
 import {
@@ -19,6 +12,11 @@ import {
 } from '@heroui/modal';
 import { Select, SelectItem } from '@heroui/react';
 import GameCard from '../components/gameCard';
+import {
+    fetchPlayersWithStats,
+    fetchGamesWithPlayers,
+    saveGame,
+} from '../service/firebase.service';
 
 export default function HistoryPage() {
     const [player, setPlayer] = useState<Player[]>([]);
@@ -39,10 +37,10 @@ export default function HistoryPage() {
     };
 
     const fetch = () => {
-        fetchPlayers().then((player) => {
+        fetchPlayersWithStats().then((player) => {
             setPlayer(player);
         });
-        fetchGames().then((game) => {
+        fetchGamesWithPlayers().then((game) => {
             setGames(game);
         });
     };
