@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-    apiKey: "AIzaSyAI8BYekdwhBjlXUAz8Myti3Z73x1mtyQQ",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "chalkitup-95340.firebaseapp.com",
     projectId: "chalkitup-95340",
     storageBucket: "chalkitup-95340.firebasestorage.app",
