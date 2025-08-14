@@ -18,12 +18,18 @@ jobs:
           node-version: 18
           cache: 'npm'
 
-      - name: Install Dependencies and Build Project
+      # Zuerst erstellen wir die .env-Datei, wie wir es zuvor versucht haben.
+      - name: Create .env.production file
         run: |
-          npm ci
-          npm run build
-        env:
-          VITE_APP_API_KEY: ${{ secrets.VITE_APP_API_KEY }}
+          echo "VITE_APP_API_KEY=${{ secrets.VITE_APP_API_KEY }}" >> .env.production
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # Hier liegt die entscheidende Änderung:
+      # Wir übergeben die Umgebungsvariable explizit vor dem Build-Befehl.
+      - name: Build Project with env variable
+        run: VITE_APP_API_KEY=${{ secrets.VITE_APP_API_KEY }} npm run build
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
