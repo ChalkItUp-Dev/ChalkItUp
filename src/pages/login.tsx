@@ -12,7 +12,7 @@ function loginPage() {
                     onSubmit={doSignInWithEmailAndPassword}
                     linkText="Don't have an account? Sign up here."
                     linkTo="/register"
-                />
+                /><p>Tets</p>
             </div>
         </>
     );
