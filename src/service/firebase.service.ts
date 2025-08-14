@@ -191,7 +191,11 @@ export const fetchPlayersWithStats = async (): Promise<Player[]> => {
                 lastWins: stats.lastWins,
                 wonBy8Ball: stats.wonBy8Ball,
                 lostBy8Ball: stats.lostBy8Ball,
-                lostBy8BallPercent: stats.lostBy8Ball / stats.losses,
+                lostBy8BallPercent:
+                    stats.lostBy8Ball !== 0
+                        ? Math.round((stats.lostBy8Ball / stats.losses) * 100) /
+                          100
+                        : 0,
             };
         })
         .sort((a, b) => b.winRate - a.winRate);

@@ -110,16 +110,17 @@ export default function PlayerPage() {
         const bestWinRatePlayer = sortedByWinRate[0];
         const worstWinRatePlayer = sortedByWinRate[sortedByWinRate.length - 1];
         const highestWinStreak = getHighestWinStreak(players);
-        const sortedBy8BallWins = [...players].sort(
+        const sortedBy8BallWins = sortedByWinRate.sort(
             (a, b) => (b.lostBy8Ball || 0) - (a.lostBy8Ball || 0)
         );
         const mostlostBy8Ball = sortedBy8BallWins[0];
 
-        const sortedBy8BallPercent = [...players].sort(
+        const sortedBy8BallPercent = sortedByWinRate.sort(
             (a, b) => (b.lostBy8BallPercent || 0) - (a.lostBy8BallPercent || 0)
         );
 
         const lostBy8BallPercent = sortedBy8BallPercent[0];
+        console.log(lostBy8BallPercent);
 
         return {
             bestWinRatePlayer,
@@ -157,7 +158,7 @@ export default function PlayerPage() {
                 />
                 <StatCard
                     title="Pulled Porker Nr. 1 Relative"
-                    value={`${stats.lostBy8BallPercent ? stats.lostBy8BallPercent.lostBy8BallPercent : 0} Losses by 8-Ball`}
+                    value={`${stats.lostBy8BallPercent ? (stats.lostBy8BallPercent.lostBy8BallPercent * 100).toFixed(0) : 0}% Losses with 8-Ball`}
                     icon={<i className="fa-solid fa-bacon text-pink-400"></i>}
                     playerName={stats.lostBy8BallPercent?.username || 'N/A'}
                 />
