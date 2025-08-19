@@ -1,5 +1,7 @@
+// In your HistoryPage.tsx file
+
 import DefaultLayout from '../layouts/default';
-import { GameHistory, Player, PlayerGame } from '../service/api.service';
+import { Player, PlayerGame, GroupedGameSummary } from '../service/api.service';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Form, Tooltip } from '@heroui/react';
 import {
@@ -11,20 +13,24 @@ import {
     useDisclosure,
 } from '@heroui/modal';
 import { Select, SelectItem } from '@heroui/react';
-import GameCard from '../components/gameCard';
 import {
     fetchPlayersWithStats,
     fetchGamesWithPlayers,
     saveGame,
 } from '../service/firebase.service';
 
+// --- NEW IMPORTS ---
+import { groupGamesByMatchup } from '../service/game.utils';
+import GameSummaryCard from '../components/GameCardSummary';
+
 export default function HistoryPage() {
-    const [player, setPlayer] = useState<Player[]>([]);
-    const [games, setGames] = useState<GameHistory[]>([]);
+    const [players, setPlayers] = useState<Player[]>([]);
+    // --- STATE CHANGE: From `games` to `groupedGames` ---
+    const [groupedGames, setGroupedGames] = useState<GroupedGameSummary[]>([]);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     useEffect(() => {
-        fetch();
+        fetchData();
     }, []);
 
     const [team1, setTeam1] = useState<string[]>([]);
@@ -33,66 +39,57 @@ export default function HistoryPage() {
     const handleSelectionChangeForTeam1 = (
         e: ChangeEvent<HTMLSelectElement>
     ) => {
-        setTeam1(e.target.value.split(','));
-    };
-
-    const fetch = () => {
-        fetchPlayersWithStats().then((player) => {
-            setPlayer(player);
-        });
-        fetchGamesWithPlayers().then((game) => {
-            setGames(game);
-        });
+        setTeam1(e.target.value.split(',').filter(v => v));
     };
 
     const handleSelectionChangeForTeam2 = (
         e: ChangeEvent<HTMLSelectElement>
     ) => {
-        setTeam2(e.target.value.split(','));
+        setTeam2(e.target.value.split(',').filter(v => v));
+    };
+
+    // --- LOGIC CHANGE: Group the games after fetching ---
+    const fetchData = () => {
+        fetchPlayersWithStats().then((playerData) => {
+            setPlayers(playerData);
+        });
+        fetchGamesWithPlayers().then((gameData) => {
+            // Group the games before setting state
+            const grouped = groupGamesByMatchup(gameData);
+            setGroupedGames(grouped);
+        });
     };
 
     const startNewGame = () => {
-        const players: PlayerGame[] = [];
-
         if (team1.length === 0 || team2.length === 0) return;
 
-        team1.forEach((p) => {
-            players.push({
-                userId: p,
-                team: 1,
-                winner: false,
-            });
-        });
-        team2.forEach((p) => {
-            players.push({
-                userId: p,
-                team: 2,
-                winner: false,
-            });
-        });
-        saveGame(players).then(() => fetch());
+        const playersForGame: PlayerGame[] = [
+            ...team1.map((p) => ({ userId: p, team: 1, winner: false })),
+            ...team2.map((p) => ({ userId: p, team: 2, winner: false })),
+        ];
+
+        // After saving, re-fetch and re-group all data
+        saveGame(playersForGame).then(() => fetchData());
     };
 
     return (
         <DefaultLayout title={'Game history'}>
-            {games.map((stat, index) => {
-                return (
-                    <div
-                        className="flex w-full justify-center"
-                        key={index + ' Card'}
-                    >
-                        <GameCard game={stat} key={index + ' GameCard'} />
-                    </div>
-                );
-            })}
+            <div className={"grid gap-4 md:grid-cols-2 lg:grid-cols-2 mb-8"}>
+                {groupedGames.map((summary) => (
+                <div
+                    className="flex w-full justify-center"
+                    key={summary.id}
+                >
+                    <GameSummaryCard summary={summary} />
+                </div>
+            ))}
+            </div>
             <div className="fixed bottom-24 right-4">
                 <Tooltip content="Create new Game">
                     <Button
                         className="rounded-full shadow-xl bg-green-500 font-bold text-xl "
                         isIconOnly
-                        onPress={() => {
-                            onOpen();
-                        }}
+                        onPress={onOpen}
                     >
                         <i className="fa-solid fa-plus"></i>
                     </Button>
@@ -115,7 +112,7 @@ export default function HistoryPage() {
                                         isRequired
                                         onChange={handleSelectionChangeForTeam1}
                                     >
-                                        {player.map((p) => (
+                                        {players.map((p) => (
                                             <SelectItem key={p.userId}>
                                                 {p.username}
                                             </SelectItem>
@@ -128,7 +125,7 @@ export default function HistoryPage() {
                                         isRequired
                                         onChange={handleSelectionChangeForTeam2}
                                     >
-                                        {player.map((p) => (
+                                        {players.map((p) => (
                                             <SelectItem key={p.userId}>
                                                 {p.username}
                                             </SelectItem>

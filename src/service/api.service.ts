@@ -39,3 +39,22 @@ export interface PlayerGameDTO {
     winner: boolean;
     endState?: 'win' | 'loss_by_8_ball';
 }
+
+// In src/service/api.service.ts
+
+// [ Keep all your existing interfaces: Player, Game, PlayerGame, etc. ]
+
+// Add this new interface at the end of the file
+export interface GroupedGameSummary {
+    id: string; // A unique ID for the matchup
+    teamA: {
+        players: Player[];
+        wins: number;
+    };
+    teamB: {
+        players: Player[];
+        wins: number;
+    };
+    // This will store the timestamp in milliseconds from Date.getTime()
+    //lastPlayed: number;
+}
