@@ -2,9 +2,9 @@ import LoginPage from './pages/login';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import RegisterPage from './pages/register';
-import { AuthProvider, useAuth } from './contexts/authContext/index';
+import { AuthProvider, useAuth } from './contexts/authContext';
 import HistoryPage from './pages/history';
-import PlayerPage from './pages/player';
+import PlayerPage from './pages/stats';
 import ProfilePage from './pages/profile';
 import WelcomePage from './pages/welcome';
 import GlobalSpinner from './components/spinner';
