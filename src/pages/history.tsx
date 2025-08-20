@@ -59,9 +59,9 @@ export default function HistoryPage() {
         });
     };
 
-    // --- NEW HANDLER to finalize a game ---
-    const handleSetWinner = (gameId: string, winningTeam: number) => {
-        setGameWinner(gameId, winningTeam).then(() => {
+    /// --- UPDATE THIS HANDLER to accept the new endState parameter ---
+    const handleSetWinner = (gameId: string, winningTeam: number, endState: string) => {
+        setGameWinner(gameId, winningTeam, endState).then(() => {
             fetchData(); // Refresh the data to move the game to history
         });
     };

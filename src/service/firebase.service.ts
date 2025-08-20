@@ -235,17 +235,18 @@ export const fetchGamesWithPlayers = async (): Promise<GameHistory[]> => {
     }));
 };
 
-// In src/service/firestore.service.ts
+/// In src/service/firebase.service.ts
 
-// ... (keep all your existing imports and functions)
+// ... (other imports)
 
-// --- ADD THIS NEW FUNCTION ---
+// --- MODIFY THIS FUNCTION ---
 /**
- * Finalizes a game by setting a winner and an end time.
+ * Finalizes a game by setting a winner, an end state, and an end time.
  * @param gameId The ID of the game to update.
  * @param winningTeam The team number (1 or 2) that won.
+ * @param endState A string describing how the game ended (e.g., 'normal', 'loss_by_8_ball').
  */
-export const setGameWinner = async (gameId: string, winningTeam: number): Promise<void> => {
+export const setGameWinner = async (gameId: string, winningTeam: number, endState: string): Promise<void> => {
     const gameRef = doc(db, 'Games', gameId);
     const gameSnap = await getDoc(gameRef);
 
@@ -253,18 +254,20 @@ export const setGameWinner = async (gameId: string, winningTeam: number): Promis
         throw new Error("Game not found!");
     }
 
-    // Get the current player data
     const currentPlayers = gameSnap.data().players as PlayerGame[];
 
-    // Create the updated player array with winner status
+    // Create the updated player array with winner and endState status
     const updatedPlayers = currentPlayers.map((player) => ({
         ...player,
         winner: player.team === winningTeam,
+        // Set the specific end state for each player
+        endState: player.team !== winningTeam && endState === 'loss_by_8_ball' ? 'loss_by_8_ball' : 'normal',
     }));
 
-    // Update the document with the winner info and the end time
+    // Update the document with the new data
     await updateDoc(gameRef, {
         players: updatedPlayers,
-        endTime: serverTimestamp(), // This moves it from "active" to "finished"
+        endState: endState, // Save the overall game end state
+        endTime: serverTimestamp(),
     });
 };
