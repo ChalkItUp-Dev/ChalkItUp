@@ -234,3 +234,37 @@ export const fetchGamesWithPlayers = async (): Promise<GameHistory[]> => {
         })),
     }));
 };
+
+// In src/service/firestore.service.ts
+
+// ... (keep all your existing imports and functions)
+
+// --- ADD THIS NEW FUNCTION ---
+/**
+ * Finalizes a game by setting a winner and an end time.
+ * @param gameId The ID of the game to update.
+ * @param winningTeam The team number (1 or 2) that won.
+ */
+export const setGameWinner = async (gameId: string, winningTeam: number): Promise<void> => {
+    const gameRef = doc(db, 'Games', gameId);
+    const gameSnap = await getDoc(gameRef);
+
+    if (!gameSnap.exists()) {
+        throw new Error("Game not found!");
+    }
+
+    // Get the current player data
+    const currentPlayers = gameSnap.data().players as PlayerGame[];
+
+    // Create the updated player array with winner status
+    const updatedPlayers = currentPlayers.map((player) => ({
+        ...player,
+        winner: player.team === winningTeam,
+    }));
+
+    // Update the document with the winner info and the end time
+    await updateDoc(gameRef, {
+        players: updatedPlayers,
+        endTime: serverTimestamp(), // This moves it from "active" to "finished"
+    });
+};
